@@ -1,5 +1,5 @@
 - name: Ping servers
-  hosts: all
+  hosts: Servers
   tasks:
     - name: Ping the servers
       ping:
