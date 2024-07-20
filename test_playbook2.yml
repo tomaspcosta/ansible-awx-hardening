@@ -1,6 +1,9 @@
 ---
 - hosts: all
   tasks:
+          - name: Update APT repo
+            shell: apt-get update
+            
           - name: Install apache2 server
             apt:
               name: 
