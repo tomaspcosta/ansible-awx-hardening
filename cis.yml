@@ -30,12 +30,15 @@
         - { rule: 'allow', port: '80', proto: 'tcp' }  # Allow HTTP
         - { rule: 'allow', port: '443', proto: 'tcp' } # Allow HTTPS
 
-    - name: Set the default UFW policy
+    - name: Set the default UFW policy for incoming traffic
       ufw:
-        default: "{{ item }}"
-      loop:
-        - incoming: deny
-        - outgoing: deny
+        default: deny
+        direction: incoming
+
+    - name: Set the default UFW policy for outgoing traffic
+      ufw:
+        default: deny
+        direction: outgoing
 
     - name: Ensure no legacy SSH keys exist
       file:
