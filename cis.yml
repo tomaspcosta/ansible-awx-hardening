@@ -90,14 +90,29 @@
         - systemd-journald
         - systemd-logind
 
-    - name: Disable unnecessary services
+    - name: Check if avahi-daemon is installed
+      command: systemctl list-units --type=service --all | grep avahi-daemon
+      register: avahi_daemon_check
+      ignore_errors: yes
+
+    - name: Check if bluetooth is installed
+      command: systemctl list-units --type=service --all | grep bluetooth
+      register: bluetooth_check
+      ignore_errors: yes
+
+    - name: Disable avahi-daemon if installed
       systemd:
-        name: "{{ item }}"
+        name: avahi-daemon
         enabled: no
         state: stopped
-      loop:
-        - avahi-daemon
-        - bluetooth
+      when: avahi_daemon_check.rc == 0
+
+    - name: Disable bluetooth if installed
+      systemd:
+        name: bluetooth
+        enabled: no
+        state: stopped
+      when: bluetooth_check.rc == 0
 
     - name: Ensure core dumps are disabled
       lineinfile:
