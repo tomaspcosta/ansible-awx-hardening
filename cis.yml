@@ -105,14 +105,16 @@
         name: avahi-daemon
         enabled: no
         state: stopped
-      when: avahi_daemon_check.rc == 0
+      when: avahi_daemon_check.stdout != ""
+      ignore_errors: yes
 
     - name: Disable bluetooth if installed
       systemd:
         name: bluetooth
         enabled: no
         state: stopped
-      when: bluetooth_check.rc == 0
+      when: bluetooth_check.stdout != ""
+      ignore_errors: yes
 
     - name: Ensure core dumps are disabled
       lineinfile:
