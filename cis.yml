@@ -21,20 +21,21 @@
 
     - name: Configure UFW to allow only necessary services
       ufw:
-        rule: "{{ item }}"
+        rule: "{{ item.rule }}"
+        port: "{{ item.port }}"
+        proto: "{{ item.proto }}"
         state: enabled
       loop:
-        - { proto: tcp, port: '22' }  # Allow SSH
-        - { proto: tcp, port: '80' }  # Allow HTTP
-        - { proto: tcp, port: '443' } # Allow HTTPS
+        - { rule: 'allow', port: '22', proto: 'tcp' }  # Allow SSH
+        - { rule: 'allow', port: '80', proto: 'tcp' }  # Allow HTTP
+        - { rule: 'allow', port: '443', proto: 'tcp' } # Allow HTTPS
 
     - name: Set the default UFW policy
       ufw:
-        default: deny
-        rule: "{{ item }}"
+        default: "{{ item }}"
       loop:
-        - incoming
-        - outgoing
+        - incoming: deny
+        - outgoing: deny
 
     - name: Ensure no legacy SSH keys exist
       file:
@@ -155,7 +156,7 @@
         regexp: '^{{ item.key }}'
         line: '{{ item.key }} {{ item.value }}'
       loop:
-        - { key: password requisite pam_pwquality.so, value: retry=3 minlen=12 ucredit=-1 lcredit=-1 dcredit=-1 ocredit=-1 }
+        - { key: password requisite pam_pwquality.so, value: 'retry=3 minlen=12 ucredit=-1 lcredit=-1 dcredit=-1 ocredit=-1' }
 
     - name: Ensure that the system is configured to prevent users from setting empty passwords
       lineinfile:
@@ -163,4 +164,4 @@
         regexp: '^{{ item.key }}'
         line: '{{ item.key }} {{ item.value }}'
       loop:
-        - { key: password requisite pam_pwquality.so, value: enforce_for_root }
+        - { key: password requisite pam_pwquality.so, value: 'enforce_for_root' }
