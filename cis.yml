@@ -121,6 +121,7 @@
         path: /etc/security/limits.conf
         regexp: '^* soft core'
         line: '* soft core 0'
+      validate: 'grep -q "^\\* soft core" %s'
 
     - name: Configure auditd to ensure auditing is enabled
       package:
