@@ -90,12 +90,12 @@
         - systemd-journald
         - systemd-logind
 
-    - name: Check if avahi-daemon is installed
+    - name: Check if avahi-daemon service is available
       command: systemctl list-units --type=service --all | grep avahi-daemon
       register: avahi_daemon_check
       ignore_errors: yes
 
-    - name: Check if bluetooth is installed
+    - name: Check if bluetooth service is available
       command: systemctl list-units --type=service --all | grep bluetooth
       register: bluetooth_check
       ignore_errors: yes
