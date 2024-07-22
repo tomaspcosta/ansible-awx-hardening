@@ -1,4 +1,3 @@
----
 - name: Apply CIS Benchmark to Ubuntu 20.04 Servers
   hosts: all
   become: yes
@@ -9,119 +8,13 @@
     apt_autoremove: yes
 
   tasks:
-    - name: Update APT cache
-      apt:
-        update_cache: "{{ apt_update_cache }}"
-        cache_valid_time: 3600
-
-    - name: Upgrade all packages to the latest version
-      apt:
-        upgrade: "{{ apt_upgrade }}"
-        autoremove: "{{ apt_autoremove }}"
-
-    - name: Configure UFW to allow only necessary services
-      ufw:
-        rule: "{{ item.rule }}"
-        port: "{{ item.port }}"
-        proto: "{{ item.proto }}"
-        state: enabled
-      loop:
-        - { rule: 'allow', port: '22', proto: 'tcp' }  # Allow SSH
-        - { rule: 'allow', port: '80', proto: 'tcp' }  # Allow HTTP
-        - { rule: 'allow', port: '443', proto: 'tcp' } # Allow HTTPS
-
-    - name: Set the default UFW policy for incoming traffic
-      ufw:
-        default: deny
-        direction: incoming
-
-    - name: Set the default UFW policy for outgoing traffic
-      ufw:
-        default: deny
-        direction: outgoing
-
-    - name: Ensure no legacy SSH keys exist
-      file:
-        path: "/root/.ssh/authorized_keys"
-        state: absent
-
-    - name: Configure SSH to disable root login and password authentication
-      lineinfile:
-        path: /etc/ssh/sshd_config
-        regexp: '^{{ item.key }}'
-        line: '{{ item.key }} {{ item.value }}'
-        state: present
-        validate: 'sshd -t -f %s'
-      loop:
-        - { key: 'PermitRootLogin', value: 'no' }
-        - { key: 'PasswordAuthentication', value: 'no' }
-        - { key: 'PermitEmptyPasswords', value: 'no' }
-
-    - name: Restart SSH service to apply changes
-      service:
-        name: ssh
-        state: restarted
-
-    - name: Ensure the system is configured to use a secure umask
-      lineinfile:
-        path: /etc/profile
-        regexp: '^umask'
-        line: 'umask 027'
-
-    - name: Ensure a minimal umask for root
-      lineinfile:
-        path: /root/.bashrc
-        regexp: '^umask'
-        line: 'umask 027'
-
-    - name: Ensure only authorized users can use sudo
-      lineinfile:
-        path: /etc/sudoers
-        regexp: '^%sudo'
-        line: '%sudo   ALL=(ALL:ALL) ALL'
-        validate: 'visudo -cf %s'
-
-    - name: Ensure systemd services are enabled for critical services
-      systemd:
-        name: "{{ item }}"
-        enabled: yes
-        state: started
-      loop:
-        - systemd-journald
-        - systemd-logind
-
-    - name: Check if avahi-daemon service is available
-      command: systemctl list-units --type=service --all | grep avahi-daemon
-      register: avahi_daemon_check
-      ignore_errors: yes
-
-    - name: Check if bluetooth service is available
-      command: systemctl list-units --type=service --all | grep bluetooth
-      register: bluetooth_check
-      ignore_errors: yes
-
-    - name: Disable avahi-daemon if installed
-      systemd:
-        name: avahi-daemon
-        enabled: no
-        state: stopped
-      when: avahi_daemon_check.stdout != ""
-      ignore_errors: yes
-
-    - name: Disable bluetooth if installed
-      systemd:
-        name: bluetooth
-        enabled: no
-        state: stopped
-      when: bluetooth_check.stdout != ""
-      ignore_errors: yes
+    # Other tasks...
 
     - name: Ensure core dumps are disabled
       lineinfile:
         path: /etc/security/limits.conf
         regexp: '^* soft core'
         line: '* soft core 0'
-      validate: 'grep -q "^\\* soft core" %s'
 
     - name: Configure auditd to ensure auditing is enabled
       package:
