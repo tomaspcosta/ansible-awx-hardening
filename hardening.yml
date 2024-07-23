@@ -1,0 +1,29 @@
+---
+- name: Run cis hardening
+  hosts: all
+  gather_facts: true
+  roles:
+    - role_cis
+  post_tasks:
+    - name: Reload firewall
+      ansible.builtin.shell: "iptables -P OUTPUT ACCEPT"
+      become: true
+
+# Add unit file for iptables service:
+# /etc/systemd/system/iptables-rules.service
+#
+# [Unit]
+# Description=Apply custom iptables rules
+# After=network.target
+#
+# [Service]
+# ExecStart=/sbin/iptables -P OUTPUT ACCEPT
+# ExecStartPost=/usr/sbin/netfilter-persistent save
+# Type=oneshot
+# RemainAfterExit=yes
+#
+# [Install]
+# WantedBy=multi-user.target
+#
+# systemctl daemon-reload
+# systemctl enable --now iptables-rules.service
