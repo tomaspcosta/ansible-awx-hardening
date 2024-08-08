@@ -26,4 +26,5 @@
 # WantedBy=multi-user.target
 #
 # systemctl daemon-reload
-# systemctl enable --now iptables-rules.service
+# systemctl enable --now iptables-rules.services
+#asadasdadasdaasdsadasdasdsa
