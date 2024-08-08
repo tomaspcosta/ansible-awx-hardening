@@ -33,13 +33,14 @@ ubtu20cis_sshd:
   client_alive_count_max: 3
   login_grace_time: 60
   max_sessions: 4
-  allow_users: "server server1 server2 server3 master vagrant ubuntu"
-  allow_groups: "server server1 server2 server3 master vagrant ubuntu"
+  allow_users: "server server1 server2 server3 server4 master vagrant ubuntu"
+  allow_groups: "server server1 server2 server3 server4 master vagrant ubuntu"
 allow_users_wheel:
   - server
   - server1
   - server2
   - server3
+  - server4
   - master
   - vagrant
   - ubuntu
