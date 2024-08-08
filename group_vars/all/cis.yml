@@ -35,6 +35,14 @@ ubtu20cis_sshd:
   max_sessions: 4
   allow_users: "server server1 server2 server3 master vagrant ubuntu"
   allow_groups: "server server1 server2 server3 master vagrant ubuntu"
+allow_users_wheel:
+  - server
+  - server1
+  - server2
+  - server3
+  - master
+  - vagrant
+  - ubuntu
 ubtu20cis_set_root_password: false
 ubtu20cis_time_sync_tool: 'systemd-timesyncd'
 ubtu20cis_syslog_service: 'rsyslog'

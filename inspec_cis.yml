@@ -1,0 +1,5 @@
+---
+- name: Run InSpec Role
+  hosts: all
+  roles:
+    - role_inspec
