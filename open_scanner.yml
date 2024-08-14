@@ -3,9 +3,9 @@
   become: yes
   vars:
     scap_profile: "xccdf_org.ssgproject.content_profile_standard"
-    scap_content: "/home/awx/scap-content/ssg-ubuntu2004-ds.xml"
+    scap_content: "/home/awx/oscap_results/ssg-ubuntu2004-ds.xml"
     result_dir: "/tmp/oscap-results"
-    report_dir: "/home/awx/oscap-results"
+    report_dir: "/home/awx/oscap_results"
     date: "{{ ansible_date_time.date }}"
 
   tasks:
