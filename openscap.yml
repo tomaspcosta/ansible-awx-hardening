@@ -1,0 +1,26 @@
+- name: Run OpenSCAP Scan
+  hosts: all
+  become: yes
+  vars:
+    scap_profile: "xccdf_org.ssgproject.content_profile_standard"
+    scap_content: "/home/awx/scap-content/ssg-ubuntu2004-ds.xml"
+    result_dir: "/tmp/oscap-results"
+    date: "{{ ansible_date_time.date }}"
+
+  tasks:
+    - name: Ensure result directory exists
+      file:
+        path: "{{ result_dir }}"
+        state: directory
+
+    - name: Run OpenSCAP scan
+      command: >
+        oscap xccdf eval --profile {{ scap_profile }}
+        --results {{ result_dir }}/oscap-results-{{ inventory_hostname }}-{{ date }}.xml
+        {{ scap_content }}
+      
+    - name: Copy results to AWX server
+      fetch:
+        src: "{{ result_dir }}/oscap-results-{{ inventory_hostname }}-{{ date }}.xml"
+        dest: "/home/awx/oscap-results/"
+        flat: yes
