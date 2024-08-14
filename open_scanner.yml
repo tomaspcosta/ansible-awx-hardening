@@ -32,7 +32,7 @@
 
     - name: Debug scan result
       debug:
-        var: scan_result
+        msg: "Scan Result: {{ scan_result }}"
 
     - name: Generate HTML report
       command: >
