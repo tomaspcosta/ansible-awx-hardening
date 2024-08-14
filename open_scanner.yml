@@ -1,9 +1,10 @@
+---
 - name: OpenSCAP Full Scan and Report
   hosts: all
   become: yes
   vars:
-    scap_profile: "xccdf_org.ssgproject.content_profile_standard"
-    scap_content: "/home/awx/scap-content/content/linux_os/ubuntu/ssg-ubuntu2004-ds.xml"
+    scap_profile: "xccdf_org.ssgproject.content_profile_standard"  # Adjust if needed
+    scap_content: "/home/master/awx/scap-content/content/linux_os/ubuntu/ssg-ubuntu2004-ds.xml"  # Adjust to the correct path
     result_dir: "/tmp/oscap-results"
     report_dir: "/home/awx/oscap-results"
     date: "{{ ansible_date_time.date }}"
@@ -20,6 +21,11 @@
     - name: Ensure result directory exists
       file:
         path: "{{ result_dir }}"
+        state: directory
+
+    - name: Ensure report directory exists
+      file:
+        path: "{{ report_dir }}"
         state: directory
 
     - name: Run OpenSCAP scan
@@ -40,11 +46,6 @@
         {{ result_dir }}/oscap-results-{{ inventory_hostname }}-{{ date }}.xml
         > {{ result_dir }}/report-{{ inventory_hostname }}-{{ date }}.html
       when: scan_result is succeeded
-
-    - name: Ensure report directory exists
-      file:
-        path: "{{ report_dir }}"
-        state: directory
 
     - name: Copy results to AWX server
       fetch:
