@@ -1,0 +1,10 @@
+- name: Install OpenSCAP on target machines
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install OpenSCAP packages
+      apt:
+        name:
+          - libopenscap8
+          - openscap-scanner
+        state: present
