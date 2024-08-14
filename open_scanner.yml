@@ -1,0 +1,46 @@
+- name: OpenSCAP Full Scan and Report
+  hosts: all
+  become: yes
+  vars:
+    scap_profile: "xccdf_org.ssgproject.content_profile_standard"
+    scap_content: "/home/awx/scap-content/ssg-ubuntu2004-ds.xml"
+    result_dir: "/tmp/oscap-results"
+    report_dir: "/home/awx/oscap-results"
+    date: "{{ ansible_date_time.date }}"
+
+  tasks:
+    - name: Install OpenSCAP packages
+      apt:
+        name:
+          - libopenscap8
+          - openscap-scanner
+        state: present
+
+    - name: Ensure result directory exists
+      file:
+        path: "{{ result_dir }}"
+        state: directory
+
+    - name: Run OpenSCAP scan
+      command: >
+        oscap xccdf eval --profile {{ scap_profile }}
+        --results {{ result_dir }}/oscap-results-{{ inventory_hostname }}-{{ date }}.xml
+        {{ scap_content }}
+
+    - name: Generate HTML report
+      command: >
+        oscap xccdf generate report
+        {{ result_dir }}/oscap-results-{{ inventory_hostname }}-{{ date }}.xml
+        > {{ result_dir }}/report-{{ inventory_hostname }}-{{ date }}.html
+
+    - name: Copy results to AWX server
+      fetch:
+        src: "{{ result_dir }}/oscap-results-{{ inventory_hostname }}-{{ date }}.xml"
+        dest: "{{ report_dir }}/"
+        flat: yes
+
+    - name: Copy HTML reports to AWX server
+      fetch:
+        src: "{{ result_dir }}/report-{{ inventory_hostname }}-{{ date }}.html"
+        dest: "{{ report_dir }}/"
+        flat: yes
