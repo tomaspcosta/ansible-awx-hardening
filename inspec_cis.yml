@@ -1,6 +1,0 @@
----
-- name: Run InSpec Role
-  hosts: all
-  serial: 1
-  roles:
-    - role_inspec
