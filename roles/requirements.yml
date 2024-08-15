@@ -3,9 +3,4 @@
   src: https://github.com/ansible-lockdown/UBUNTU20-CIS.git
   scm: git
   version: main
-- name: role_inspec
-  src: https://github.com/oVogEnt/inspec_awx_role.git 
-  scm: git
-  version: main
-...
-
+---
