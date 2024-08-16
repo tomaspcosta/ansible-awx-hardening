@@ -81,12 +81,6 @@
       ansible.builtin.debug:
         var: scan_result.rc
 
-    - name: Provide guidance on what to do next
-      ansible.builtin.debug:
-        msg: >
-          The STIG scan has completed. Review the report.html file in your local
-          directory for detailed results.
-
     - name: Slurp the report from the node
       ansible.builtin.slurp:
         src: /tmp/{{ ansible_hostname }}-report.html
