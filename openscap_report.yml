@@ -17,10 +17,6 @@
       register: oscap_location
       ignore_errors: yes
 
-    - name: Display OpenSCAP version
-      ansible.builtin.command: oscap -V
-      when: oscap_location.rc == 0
-
     - name: Install SCAP security guide for Debian-based OS
       ansible.builtin.apt:
         name: ssg-debderived
