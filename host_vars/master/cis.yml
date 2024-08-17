@@ -1,4 +1,5 @@
 ---
+# ufw
 ubtu20cis_rule_3_4_1_1: false
 ubtu20cis_rule_3_4_1_2: false
 ubtu20cis_rule_3_4_1_3: false
@@ -6,6 +7,29 @@ ubtu20cis_rule_3_4_1_4: false
 ubtu20cis_rule_3_4_1_5: false
 ubtu20cis_rule_3_4_1_6: false
 ubtu20cis_rule_3_4_1_7: false
+# nftables
+ubtu20cis_rule_3_4_2_1: false
+ubtu20cis_rule_3_4_2_2: false
+ubtu20cis_rule_3_4_2_3: false
+ubtu20cis_rule_3_4_2_4: false
+ubtu20cis_rule_3_4_2_5: false
+ubtu20cis_rule_3_4_2_6: false
+ubtu20cis_rule_3_4_2_7: false
+ubtu20cis_rule_3_4_2_8: false
+ubtu20cis_rule_3_4_2_9: false
+ubtu20cis_rule_3_4_2_10: false
+# iptables
+ubtu20cis_rule_3_4_3_1_1: false
+ubtu20cis_rule_3_4_3_1_2: false
+ubtu20cis_rule_3_4_3_1_3: false
+ubtu20cis_rule_3_4_3_2_1: false
+ubtu20cis_rule_3_4_3_2_2: false
+ubtu20cis_rule_3_4_3_2_3: false
+ubtu20cis_rule_3_4_3_2_4: false
+ubtu20cis_rule_3_4_3_3_1: false
+ubtu20cis_rule_3_4_3_3_2: false
+ubtu20cis_rule_3_4_3_3_3: false
+ubtu20cis_rule_3_4_3_3_4: false
 ansible_user: "master"
 ...
 
