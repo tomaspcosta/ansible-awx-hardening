@@ -1,7 +1,7 @@
 ---
 # Section 3 is Network Configuration (Disable Unused Networks, Network Parameters (Host Only), Network Parameters (Host and Router), Uncommon Network Protocols, and Firewall Configuration)
-ubtu20cis_rule_3_1_1: false
-ubtu20cis_rule_3_1_2: false
+ubtu20cis_rule_3_1_1: true
+ubtu20cis_rule_3_1_2: true
 ubtu20cis_rule_3_1_3: false
 ubtu20cis_rule_3_1_4: false
 ubtu20cis_rule_3_1_5: false
@@ -23,13 +23,176 @@ ubtu20cis_rule_3_4_2: false
 ubtu20cis_rule_3_4_3: false
 ubtu20cis_rule_3_4_4: false
 # ufw
-ubtu20cis_rule_3_4_1_1: true
-ubtu20cis_rule_3_4_1_2: true
-ubtu20cis_rule_3_4_1_3: true
-ubtu20cis_rule_3_4_1_4: true
-ubtu20cis_rule_3_4_1_5: true
-ubtu20cis_rule_3_4_1_6: true
-ubtu20cis_rule_3_4_1_7: true
+ubtu20cis_rule_3_4_1_1: false
+ubtu20cis_rule_3_4_1_2: false
+ubtu20cis_rule_3_4_1_3: false
+ubtu20cis_rule_3_4_1_4: false
+ubtu20cis_rule_3_4_1_5: false
+ubtu20cis_rule_3_4_1_6: false
+ubtu20cis_rule_3_4_1_7: false
+
+
+####################################
+
+# Section 4 Fixes
+# Section 4 is Access Authentication and job schedulers
+ubtu20cis_rule_4_1_1: false
+ubtu20cis_rule_4_1_2: false
+ubtu20cis_rule_4_1_3: false
+ubtu20cis_rule_4_1_4: false
+ubtu20cis_rule_4_1_5: false
+ubtu20cis_rule_4_1_6: false
+ubtu20cis_rule_4_1_7: false
+ubtu20cis_rule_4_1_8: false
+ubtu20cis_rule_4_1_9: false
+ubtu20cis_rule_4_2_1: false
+ubtu20cis_rule_4_2_2: false
+ubtu20cis_rule_4_2_3: false
+ubtu20cis_rule_4_2_4: false
+ubtu20cis_rule_4_2_5: false
+ubtu20cis_rule_4_2_6: false
+ubtu20cis_rule_4_2_7: false
+ubtu20cis_rule_4_2_8: false
+ubtu20cis_rule_4_2_9: false
+ubtu20cis_rule_4_2_10: false
+ubtu20cis_rule_4_2_11: false
+ubtu20cis_rule_4_2_12: false
+ubtu20cis_rule_4_2_13: false
+ubtu20cis_rule_4_2_14: false
+ubtu20cis_rule_4_2_15: false
+ubtu20cis_rule_4_2_16: false
+ubtu20cis_rule_4_2_17: false
+ubtu20cis_rule_4_2_18: false
+ubtu20cis_rule_4_2_19: false
+ubtu20cis_rule_4_2_20: false
+ubtu20cis_rule_4_2_21: false
+ubtu20cis_rule_4_2_22: false
+ubtu20cis_rule_4_3_1: false
+ubtu20cis_rule_4_3_2: false
+ubtu20cis_rule_4_3_3: false
+ubtu20cis_rule_4_3_4: false
+ubtu20cis_rule_4_3_5: false
+ubtu20cis_rule_4_3_6: false
+ubtu20cis_rule_4_3_7: false
+ubtu20cis_rule_4_4_1: false
+ubtu20cis_rule_4_4_2: false
+ubtu20cis_rule_4_4_3: false
+ubtu20cis_rule_4_4_4: false
+ubtu20cis_rule_4_4_5: false
+
+ubtu20cis_rule_4_5_1_1: false
+ubtu20cis_rule_4_5_1_2: false
+ubtu20cis_rule_4_5_1_3: false
+ubtu20cis_rule_4_5_1_4: false
+ubtu20cis_rule_4_5_1_5: false
+ubtu20cis_rule_4_5_1_6: false
+ubtu20cis_rule_4_5_1_7: false
+ubtu20cis_rule_4_5_1: false
+ubtu20cis_rule_4_5_2: false
+ubtu20cis_rule_4_5_3: false
+ubtu20cis_rule_4_5_4: false
+ubtu20cis_rule_4_5_5: false
+ubtu20cis_rule_4_5_6: false
+ubtu20cis_rule_4_5_7: false
+
+# Section 5 Fixes
+# Section 5 is Logging and Auditing
+
+# journald
+ubtu20cis_rule_5_1_1_1_1: false
+ubtu20cis_rule_5_1_1_1_2: false
+ubtu20cis_rule_5_1_1_1_3: false
+ubtu20cis_rule_5_1_1_1_4: false
+ubtu20cis_rule_5_1_1_2: false
+ubtu20cis_rule_5_1_1_3: false
+ubtu20cis_rule_5_1_1_4: false
+ubtu20cis_rule_5_1_1_5: false
+ubtu20cis_rule_5_1_1_6: false
+ubtu20cis_rule_5_1_1_7: false
+
+# rsyslog
+
+ubtu20cis_rule_5_1_2_1: false
+ubtu20cis_rule_5_1_2_2: false
+ubtu20cis_rule_5_1_2_3: false
+ubtu20cis_rule_5_1_2_4: false
+ubtu20cis_rule_5_1_2_5: false
+ubtu20cis_rule_5_1_2_6: false
+ubtu20cis_rule_5_1_2_7: false
+
+ubtu20cis_rule_5_1_3: false
+
+# Auditd
+ubtu20cis_rule_5_2_1_1: false
+ubtu20cis_rule_5_2_1_2: false
+ubtu20cis_rule_5_2_1_3: false
+ubtu20cis_rule_5_2_1_4: false
+ubtu20cis_rule_5_2_2_1: false
+ubtu20cis_rule_5_2_2_2: false
+ubtu20cis_rule_5_2_2_3: false
+
+ubtu20cis_rule_5_2_3_1: false
+ubtu20cis_rule_5_2_3_2: false
+ubtu20cis_rule_5_2_3_3: false
+ubtu20cis_rule_5_2_3_4: false
+ubtu20cis_rule_5_2_3_5: false
+ubtu20cis_rule_5_2_3_6: false
+ubtu20cis_rule_5_2_3_7: false
+ubtu20cis_rule_5_2_3_8: false
+ubtu20cis_rule_5_2_3_9: false
+ubtu20cis_rule_5_2_3_10: false
+ubtu20cis_rule_5_2_3_11: false
+ubtu20cis_rule_5_2_3_12: false
+ubtu20cis_rule_5_2_3_13: false
+ubtu20cis_rule_5_2_3_14: false
+ubtu20cis_rule_5_2_3_15: false
+ubtu20cis_rule_5_2_3_16: false
+ubtu20cis_rule_5_2_3_17: false
+ubtu20cis_rule_5_2_3_18: false
+ubtu20cis_rule_5_2_3_19: false
+ubtu20cis_rule_5_2_3_20: false
+ubtu20cis_rule_5_2_3_21: false
+
+ubtu20cis_rule_5_2_4_1: false
+ubtu20cis_rule_5_2_4_2: false
+ubtu20cis_rule_5_2_4_3: false
+ubtu20cis_rule_5_2_4_4: false
+ubtu20cis_rule_5_2_4_5: false
+ubtu20cis_rule_5_2_4_6: false
+ubtu20cis_rule_5_2_4_7: false
+ubtu20cis_rule_5_2_4_8: false
+ubtu20cis_rule_5_2_4_9: false
+ubtu20cis_rule_5_2_4_10: false
+ubtu20cis_rule_5_2_4_11: false
+
+# Section 6 Fixes
+# Section is Systme Maintenance (System File Permissions and User and Group Settings)
+ubtu20cis_rule_6_1_1: false
+ubtu20cis_rule_6_1_2: false
+ubtu20cis_rule_6_1_3: false
+ubtu20cis_rule_6_1_4: false
+ubtu20cis_rule_6_1_5: false
+ubtu20cis_rule_6_1_6: false
+ubtu20cis_rule_6_1_7: false
+ubtu20cis_rule_6_1_8: false
+ubtu20cis_rule_6_1_9: false
+ubtu20cis_rule_6_1_10: false
+ubtu20cis_rule_6_1_11: false
+ubtu20cis_rule_6_1_12: false
+ubtu20cis_rule_6_1_13: false
+
+ubtu20cis_rule_6_2_1: false
+ubtu20cis_rule_6_2_2: false
+ubtu20cis_rule_6_2_3: false
+ubtu20cis_rule_6_2_4: false
+ubtu20cis_rule_6_2_5: false
+ubtu20cis_rule_6_2_6: false
+ubtu20cis_rule_6_2_7: false
+ubtu20cis_rule_6_2_8: false
+ubtu20cis_rule_6_2_9: false
+ubtu20cis_rule_6_2_10: false
+ubtu20cis_rule_6_2_11: false
+ubtu20cis_rule_6_2_12: false
 
 ansible_user: "master"
 ...
