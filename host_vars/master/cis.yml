@@ -1,8 +1,8 @@
 ---
 # Section 3 is Network Configuration (Disable Unused Networks, Network Parameters (Host Only), Network Parameters (Host and Router), Uncommon Network Protocols, and Firewall Configuration)
 ubtu20cis_rule_3_1_1: true
-ubtu20cis_rule_3_1_2: true
-ubtu20cis_rule_3_1_3: true
+ubtu20cis_rule_3_1_2: false
+ubtu20cis_rule_3_1_3: false
 ubtu20cis_rule_3_1_4: true
 ubtu20cis_rule_3_1_5: false
 ubtu20cis_rule_3_1_6: false
