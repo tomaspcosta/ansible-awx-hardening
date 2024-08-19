@@ -22,5 +22,14 @@ ubtu20cis_rule_3_4_1: false
 ubtu20cis_rule_3_4_2: false
 ubtu20cis_rule_3_4_3: false
 ubtu20cis_rule_3_4_4: false
+# ufw
+ubtu20cis_rule_3_4_1_1: true
+ubtu20cis_rule_3_4_1_2: true
+ubtu20cis_rule_3_4_1_3: true
+ubtu20cis_rule_3_4_1_4: true
+ubtu20cis_rule_3_4_1_5: true
+ubtu20cis_rule_3_4_1_6: true
+ubtu20cis_rule_3_4_1_7: true
+
 ansible_user: "master"
 ...
