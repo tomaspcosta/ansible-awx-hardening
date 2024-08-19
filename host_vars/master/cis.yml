@@ -1,5 +1,36 @@
 ---
 
+# Section 6 Fixes
+# Section is Systme Maintenance (System File Permissions and User and Group Settings)
+ubtu20cis_rule_6_1_1: false
+ubtu20cis_rule_6_1_2: false
+ubtu20cis_rule_6_1_3: false
+ubtu20cis_rule_6_1_4: false
+ubtu20cis_rule_6_1_5: false
+ubtu20cis_rule_6_1_6: false
+ubtu20cis_rule_6_1_7: false
+ubtu20cis_rule_6_1_8: false
+ubtu20cis_rule_6_1_9: false
+ubtu20cis_rule_6_1_10: false
+ubtu20cis_rule_6_1_11: false
+ubtu20cis_rule_6_1_12: false
+ubtu20cis_rule_6_1_13: false
+
+ubtu20cis_rule_6_2_1: false
+ubtu20cis_rule_6_2_2: false
+ubtu20cis_rule_6_2_3: false
+ubtu20cis_rule_6_2_4: false
+ubtu20cis_rule_6_2_5: false
+ubtu20cis_rule_6_2_6: false
+ubtu20cis_rule_6_2_7: false
+ubtu20cis_rule_6_2_8: false
+ubtu20cis_rule_6_2_9: false
+ubtu20cis_rule_6_2_10: false
+ubtu20cis_rule_6_2_11: false
+ubtu20cis_rule_6_2_12: false
+
+#############################################
+
 ubtu20cis_rule_2_1_1_1: false
 ubtu20cis_rule_2_1_2_1: false
 ubtu20cis_rule_2_1_2_2: false
