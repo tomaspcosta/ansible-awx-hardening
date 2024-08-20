@@ -93,5 +93,5 @@
     - name: Write report to master node
       ansible.builtin.copy:
         content: "{{ slurp_report.content | b64decode }}"
-        dest: /home/master/reports/{{ inventory_hostname }}-{{ ansible_date_time.iso8601 }}-report.html
+        dest: /home/master/reports/{{ inventory_hostname }}-{{ ansible_date_time.iso8601 | strftime('%Y-%m-%d_%H-%M-%S') }}-report.html
       delegate_to: master
