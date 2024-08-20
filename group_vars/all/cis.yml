@@ -39,3 +39,4 @@ ubtu20cis_set_root_password: false
 ubtu20cis_time_sync_tool: 'systemd-timesyncd'
 ubtu20cis_syslog_service: 'rsyslog'
 ubtu20cis_rule_3_2_2: false
+ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
