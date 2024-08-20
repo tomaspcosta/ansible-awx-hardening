@@ -1,4 +1,6 @@
 ---
 ubtu20cis_desktop_required: true
+#GNOME Display Manager
+ubtu20cis_rule_1_8_1: false
 ...
 
