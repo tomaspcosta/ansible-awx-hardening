@@ -1,9 +1,11 @@
 ---
-ubtu20cis_rule_3_1_1: false
-ubtu20cis_rule_3_1_2: false
+ubtu20cis_section1_patch: false
+ubtu20cis_section2_patch: false
+ubtu20cis_section4_patch: false
+
+
+
 ubtu20cis_rule_3_1_3: false
-ubtu20cis_rule_3_1_4: false
-ubtu20cis_rule_3_1_5: false
 ubtu20cis_rule_3_1_6: false
 ubtu20cis_rule_3_1_7: false
 ubtu20cis_rule_3_2_1: false
