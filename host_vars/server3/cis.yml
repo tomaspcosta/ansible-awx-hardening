@@ -1,8 +1,5 @@
 ---
 ubtu20cis_desktop_required: true
-setup_audit: false
-run_audit: false
-audit_only: false
 
 #GNOME Display Manager
 ubtu20cis_rule_1_8_1: false
