@@ -96,3 +96,4 @@
         content: "{{ slurp_report.content | b64decode }}"
         dest: /home/master/reports/{{ inventory_hostname }}-{{ ansible_date_time.iso8601 }}-report.html
       delegate_to: master
+      remote_user: master
