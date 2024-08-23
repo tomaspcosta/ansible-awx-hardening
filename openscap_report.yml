@@ -86,7 +86,7 @@
       ansible.builtin.file:
         path: /home/master/reports
         state: directory
-        mode: '0755'
+        mode: '0777'
       delegate_to: master
       remote_user: master
       run_once: true
