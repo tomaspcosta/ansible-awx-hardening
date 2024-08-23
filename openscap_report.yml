@@ -86,7 +86,7 @@
       ansible.builtin.file:
         path: /home/master/reports
         state: directory
-        mode: '0664'
+        mode: '0775'
       delegate_to: master
       remote_user: master
       run_once: true
@@ -95,5 +95,12 @@
       ansible.builtin.copy:
         content: "{{ slurp_report.content | b64decode }}"
         dest: /home/master/reports/{{ inventory_hostname }}-{{ ansible_date_time.iso8601 }}-report.html
+        mode: '0664'
       delegate_to: master
       remote_user: master
+
+    - name: Ensure correct ownership and permissions on the reports directory
+      ansible.builtin.command: chown -R master:master /home/master/reports && chmod -R 0775 /home/master/reports
+      delegate_to: master
+      remote_user: master
+      run_once: true
