@@ -86,7 +86,7 @@
       ansible.builtin.file:
         path: /home/master/reports
         state: directory
-        mode: '0775'
+        mode: '0755'
       delegate_to: master
       remote_user: master
       run_once: true
@@ -94,13 +94,6 @@
     - name: Ensure correct ownership on the reports directory
       ansible.builtin.command:
         cmd: chown -R master:master /home/master/reports
-      delegate_to: master
-      remote_user: master
-      run_once: true
-
-    - name: Ensure correct permissions on the reports directory
-      ansible.builtin.command:
-        cmd: chmod -R 0775 /home/master/reports
       delegate_to: master
       remote_user: master
       run_once: true
