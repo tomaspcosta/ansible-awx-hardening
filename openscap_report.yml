@@ -91,6 +91,34 @@
       remote_user: master
       run_once: true
 
+    - name: Ensure correct ownership and permissions on the reports directory
+      ansible.builtin.command: chown -R master:master /home/master/reports && chmod -R 0775 /home/master/reports
+      delegate_to: master
+      remote_user: master
+      run_once: true
+
+    - name: Validate directory ownership and permissions
+      ansible.builtin.stat:
+        path: /home/master/reports
+      register: report_dir_stat
+      delegate_to: master
+      remote_user: master
+      run_once: true
+
+    - name: Check and correct permissions if they are incorrect
+      ansible.builtin.command: chmod -R 0775 /home/master/reports
+      when: report_dir_stat.stat.mode != "0775"
+      delegate_to: master
+      remote_user: master
+      run_once: true
+
+    - name: Check and correct ownership if it is incorrect
+      ansible.builtin.command: chown -R master:master /home/master/reports
+      when: report_dir_stat.stat.pw_name != "master" or report_dir_stat.stat.gr_name != "master"
+      delegate_to: master
+      remote_user: master
+      run_once: true
+
     - name: Write report to master node
       ansible.builtin.copy:
         content: "{{ slurp_report.content | b64decode }}"
@@ -98,9 +126,3 @@
         mode: '0664'
       delegate_to: master
       remote_user: master
-
-    - name: Ensure correct ownership and permissions on the reports directory
-      ansible.builtin.command: chown -R master:master /home/master/reports && chmod -R 0775 /home/master/reports
-      delegate_to: master
-      remote_user: master
-      run_once: true
