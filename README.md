@@ -6,15 +6,15 @@ Este repositório contém uma configuração do Ansible para realizar o hardenin
 
 O repositório está organizado da seguinte forma:
 
-- `awx/collections/requirements.yml`: Define as collections do Ansible necessárias.
-- `awx/group_vars/cis.yml`: Variáveis globais para a configuração de hardening.
-- `awx/host_vars/desktop1/cis.yml`: Variáveis específicas para o host `desktop1`.
-- `awx/host_vars/master/cis.yml`: Variáveis específicas para o host `master`.
-- `awx/hosts/hosts.yml`: Arquivo de inventário do Ansible.
-- `awx/roles/requirements.yml`: Define as roles necessárias para o projeto.
-- `awx/ansible.cfg`: Configurações do Ansible.
-- `awx/hardening.yml`: Playbook principal para aplicar o hardening.
-- `awx/openscap_report.yml`: Playbook para executar avaliações de segurança com OpenSCAP e gerar relatórios.
+- `/requirements.yml`: Define as collections do Ansible necessárias.
+- `/group_vars/cis.yml`: Variáveis globais para a configuração de hardening.
+- `/host_vars/desktop1/cis.yml`: Variáveis específicas para o host `desktop1`.
+- `/host_vars/master/cis.yml`: Variáveis específicas para o host `master`.
+- `/hosts/hosts.yml`: Arquivo de inventário do Ansible.
+- `/roles/requirements.yml`: Define as roles necessárias para o projeto.
+- `/ansible.cfg`: Configurações do Ansible.
+- `/hardening.yml`: Playbook principal para aplicar o hardening.
+- `/openscap_report.yml`: Playbook para executar avaliações de segurança com OpenSCAP e gerar relatórios.
 
 ## Configuração
 
