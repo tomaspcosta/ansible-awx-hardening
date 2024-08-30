@@ -18,6 +18,6 @@ O repositório está organizado da seguinte forma:
 
 ## Configuração
 
-1. **Inventário**: O arquivo `awx/hosts/hosts.yml` contém a definição dos hosts e grupos de hosts. Certifique-se de que os endereços IP e nomes dos hosts estão corretos.
+1. **Inventário**: O arquivo `awx/hosts/hosts.yml` contém a definição dos hosts e grupos de hosts.
 
 2. **Variáveis**: As variáveis globais estão em `awx/group_vars/cis.yml`, enquanto as variáveis específicas para cada host estão em `awx/host_vars/`, neste caso para o `master` e `desktop1`.
