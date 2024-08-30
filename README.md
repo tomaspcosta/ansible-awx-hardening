@@ -26,7 +26,7 @@ O repositório está organizado da seguinte forma:
 
 ### `cis-hardening`
 
-O role `cis-hardening` faz parte do repositório `ansible-lockdown`. Ele aplica as recomendações de segurança baseadas nos benchmarks CIS para sistemas Ubuntu.
+O role `cis-hardening` faz parte do repositório `ansible-lockdown`, que aplica as recomendações de segurança baseadas nos benchmarks CIS para sistemas Ubuntu.
 
 - **Repositório**: [ansible-lockdown](https://github.com/ansible-lockdown)
 - **Role**: `cis-hardening`
