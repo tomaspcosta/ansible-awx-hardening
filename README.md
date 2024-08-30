@@ -21,3 +21,12 @@ O repositório está organizado da seguinte forma:
 1. **Inventário**: O arquivo `awx/hosts/hosts.yml` contém a definição dos hosts e grupos de hosts.
 
 2. **Variáveis**: As variáveis globais estão em `awx/group_vars/cis.yml`, enquanto as variáveis específicas para cada host estão em `awx/host_vars/`, neste caso para o `master` e `desktop1`.
+
+## Roles Utilizadas
+
+### `cis-hardening`
+
+O role `cis-hardening` é parte do repositório `ubuntu-lockdown`. Ele aplica as recomendações de segurança baseadas nos benchmarks CIS para sistemas Ubuntu. 
+
+- **Repositório**: [ubuntu-lockdown](https://github.com/ubuntu-lockdown)
+- **Role**: `cis-hardening`
