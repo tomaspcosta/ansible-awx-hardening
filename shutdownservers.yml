@@ -1,0 +1,16 @@
+---
+- name: Manage VirtualBox VMs
+  hosts: all
+  tasks:
+    - name: Stop VirtualBox VMs
+      command: VBoxManage controlvm "{{ item }}" acpipowerbutton
+      with_items:
+        - server1
+        - server2
+        - desktop1
+      register: stop_vms
+
+    - name: Display VM shutdown output
+      debug:
+        msg: "{{ item.stdout }}"
+      with_items: "{{ stop_vms.results }}"
