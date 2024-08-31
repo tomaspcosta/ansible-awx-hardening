@@ -9,12 +9,7 @@
         test_command: whoami
       register: reboot_result
 
-    - name: Notify that hosts are rebooting
-      ansible.builtin.debug:
-        msg: "[WAITING FOR THE HOSTS TO REBOOT]"
-      when: reboot_result is success
-
     - name: Display reboot result
-      ansible.builtin.debug:
+      debug:
         msg: "Host {{ inventory_hostname }} has been rebooted."
       when: reboot_result is success
