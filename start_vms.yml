@@ -1,0 +1,33 @@
+---
+- name: Start VirtualBox VMs
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Power up Ubuntu VM using vboxmanage
+      shell: |
+        VBoxManage startvm "{{ vm_name }}" --type headless
+      args:
+        executable: /bin/bash
+      environment:
+        PATH: /usr/local/bin:/usr/bin:/bin
+      register: vm_start_output
+      ignore_errors: yes
+      when: vm_name is defined
+
+    - name: Display VM startup output
+      debug:
+        msg: "{{ vm_start_output.stdout }}"
+
+    - name: Ensure VM is running
+      shell: |
+        VBoxManage showvminfo "{{ vm_name }}" | grep -q "running (since"
+      args:
+        executable: /bin/bash
+      register: vm_running
+      ignore_errors: yes
+      when: vm_name is defined
+
+    - name: Notify if VM failed to start
+      fail:
+        msg: "Failed to start the VM {{ vm_name }}"
+      when: vm_running.rc != 0 and vm_name is defined
