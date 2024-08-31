@@ -1,5 +1,5 @@
 ---
-- name: Reboot hosts and wait for them to come back online
+- name: Reboot hosts
   hosts: all
   become: yes
   tasks:
@@ -9,19 +9,7 @@
         test_command: whoami
       register: reboot_result
 
-    - name: Wait for SSH to become available
-      ansible.builtin.wait_for:
-        port: 22
-        host: "{{ inventory_hostname }}"
-        state: started
-        delay: 10  # Initial delay before starting the check
-        timeout: 0  # Use `timeout` of 0 to wait indefinitely until the port becomes available
-      async: 300  # Maximum wait time in seconds
-      poll: 10  # Interval to check for the host's availability
-      register: wait_result
-      when: reboot_result is success
-
     - name: Display reboot result
       debug:
-        msg: "Host {{ inventory_hostname }} rebooted and is back online."
+        msg: "Host {{ inventory_hostname }} has been rebooted."
       when: reboot_result is success
