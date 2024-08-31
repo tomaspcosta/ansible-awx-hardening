@@ -3,13 +3,13 @@
   hosts: all
   become: yes
   tasks:
-    - name: Power off the host
+    - name: Shut down the host
       community.general.shutdown:
-        shutdown: yes
-        timeout: 120
-      register: poweroff_result
+        delay: 0
+        msg: "Shut down initiated by Ansible"
+      register: shutdown_result
 
-    - name: Display power off result
+    - name: Display shutdown result
       debug:
-        msg: "Host {{ inventory_hostname }} is powering off."
-      when: poweroff_result is success
+        msg: "Host {{ inventory_hostname }} is shutting down."
+      when: shutdown_result.shutdown
