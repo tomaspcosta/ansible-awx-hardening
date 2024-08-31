@@ -5,11 +5,11 @@
   tasks:
     - name: Power off the host
       community.general.shutdown:
-        power_off: yes
+        shutdown: yes
         timeout: 120
-      register: shutdown_result
+      register: poweroff_result
 
-    - name: Display shutdown result
+    - name: Display power off result
       debug:
         msg: "Host {{ inventory_hostname }} is powering off."
-      when: shutdown_result is success
+      when: poweroff_result is success
