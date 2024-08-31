@@ -5,8 +5,8 @@
   tasks:
     - name: Reboot the host
       ansible.builtin.reboot:
-        reboot_timeout: 300  # Time to wait for the reboot to complete, in seconds
-        test_command: whoami  # Command to check if the host is back online
+        reboot_timeout: 150 
+        test_command: whoami  
       register: reboot_result
 
     - name: Display reboot result
