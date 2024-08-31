@@ -6,7 +6,7 @@
     - name: Shut down the host
       community.general.shutdown:
         delay: 0
-        msg: "Shut down initiated by Ansible"
+        msg: "Powering off hosts"
       register: shutdown_result
 
     - name: Display shutdown result
