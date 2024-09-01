@@ -2,156 +2,13 @@
 - name: Reboot hosts
   hosts: all
   become: yes
-  vars:
-    # Promote variables
-    sshd_strong_kex: ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256
-    var_multiple_time_servers: 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org,3.pool.ntp.org
-    var_accounts_tmout: 900
-    var_accounts_user_umask: 027
   tasks:
-    - name: Use Only Strong Key Exchange algorithms
-      block:
-        - name: Check for duplicate values
-          lineinfile:
-            path: /etc/ssh/sshd_config
-            create: false
-            regexp: (?i)^\s*KexAlgorithms\s+
-            state: absent
-          check_mode: true
-          changed_when: false
-          register: dupes
 
-        - name: Deduplicate values from /etc/ssh/sshd_config
-          lineinfile:
-            path: /etc/ssh/sshd_config
-            create: false
-            regexp: (?i)^\s*KexAlgorithms\s+
-            state: absent
-          when: dupes.found is defined and dupes.found > 1
-
-        - name: Insert correct line to /etc/ssh/sshd_config
-          lineinfile:
-            path: /etc/ssh/sshd_config
-            create: true
-            regexp: (?i)^\s*KexAlgorithms\s+
-            line: KexAlgorithms {{ sshd_strong_kex }}
-            state: present
-            insertbefore: ^[#\s]*Match
-            validate: /usr/sbin/sshd -t -f %s
-          when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    - name: XCCDF Value var_accounts_user_umask # promote to variable
+      set_fact:
+        var_accounts_user_umask: !!str 027
       tags:
-        - PCI-DSS-Req-2.3
-        - PCI-DSSv4-2.2.7
-        - low_complexity
-        - low_disruption
-        - medium_severity
-        - no_reboot_needed
-        - restrict_strategy
-        - sshd_use_strong_kex
-
-    - name: Gather the package facts
-      package_facts:
-        manager: auto
-      tags:
-        - NIST-800-53-AU-8(1)(a)
-        - NIST-800-53-CM-6(a)
-        - PCI-DSS-Req-10.4.3
-        - PCI-DSSv4-10.6.2
-        - chronyd_specify_remote_server
-        - configure_strategy
-        - low_complexity
-        - low_disruption
-        - medium_severity
-        - no_reboot_needed
-
-    - name: Detect if chrony is already configured with pools or servers
-      find:
-        path: /etc
-        patterns: chrony.conf
-        contains: ^[\s]*(?:server|pool)[\s]+[\w]+
-      register: chrony_servers
-      when:
-        - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-        - '"chrony" in ansible_facts.packages'
-      tags:
-        - NIST-800-53-AU-8(1)(a)
-        - NIST-800-53-CM-6(a)
-        - PCI-DSS-Req-10.4.3
-        - PCI-DSSv4-10.6.2
-        - chronyd_specify_remote_server
-        - configure_strategy
-        - low_complexity
-        - low_disruption
-        - medium_severity
-        - no_reboot_needed
-
-    - name: Configure remote time servers
-      lineinfile:
-        path: /etc/chrony/chrony.conf
-        line: server {{ item }}
-        state: present
-        create: true
-      loop: '{{ var_multiple_time_servers.split(",") }}'
-      when:
-        - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-        - '"chrony" in ansible_facts.packages'
-        - chrony_servers.matched == 0
-      tags:
-        - NIST-800-53-AU-8(1)(a)
-        - NIST-800-53-CM-6(a)
-        - PCI-DSS-Req-10.4.3
-        - PCI-DSSv4-10.6.2
-        - chronyd_specify_remote_server
-        - configure_strategy
-        - low_complexity
-        - low_disruption
-        - medium_severity
-        - no_reboot_needed
-
-    - name: Correct any occurrence of TMOUT in /etc/profile
-      replace:
-        path: /etc/profile
-        regexp: ^[^#].*TMOUT=.*
-        replace: declare -xr TMOUT={{ var_accounts_tmout }}
-      register: profile_replaced
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-        - DISA-STIG-UBTU-20-010013
-        - NIST-800-171-3.1.11
-        - NIST-800-53-AC-12
-        - NIST-800-53-AC-2(5)
-        - NIST-800-53-CM-6(a)
-        - NIST-800-53-SC-10
-        - PCI-DSSv4-8.6.1
-        - accounts_tmout
-        - low_complexity
-        - low_disruption
-        - medium_severity
-        - no_reboot_needed
-        - restrict_strategy
-
-    - name: Set Interactive Session Timeout
-      lineinfile:
-        path: /etc/profile.d/tmout.sh
-        create: true
-        regexp: TMOUT=
-        line: declare -xr TMOUT={{ var_accounts_tmout }}
-        state: present
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-        - DISA-STIG-UBTU-20-010013
-        - NIST-800-171-3.1.11
-        - NIST-800-53-AC-12
-        - NIST-800-53-AC-2(5)
-        - NIST-800-53-CM-6(a)
-        - NIST-800-53-SC-10
-        - PCI-DSSv4-8.6.1
-        - accounts_tmout
-        - low_complexity
-        - low_disruption
-        - medium_severity
-        - no_reboot_needed
-        - restrict_strategy
+        - always
 
     - name: Check if umask in /etc/csh.cshrc is already set
       ansible.builtin.lineinfile:
@@ -202,3 +59,156 @@
         - medium_severity
         - no_reboot_needed
         - restrict_strategy
+
+    - name: XCCDF Value var_accounts_tmout # promote to variable
+      set_fact:
+        var_accounts_tmout: !!str 900
+      tags:
+        - always
+
+    - name: Correct any occurrence of TMOUT in /etc/profile
+      replace:
+        path: /etc/profile
+        regexp: ^[^#].*TMOUT=.*
+        replace: declare -xr TMOUT={{ var_accounts_tmout }}
+      register: profile_replaced
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+        - DISA-STIG-UBTU-20-010013
+        - NIST-800-171-3.1.11
+        - NIST-800-53-AC-12
+        - NIST-800-53-AC-2(5)
+        - NIST-800-53-CM-6(a)
+        - NIST-800-53-SC-10
+        - PCI-DSSv4-8.6.1
+        - accounts_tmout
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+        - restrict_strategy
+
+    - name: Set Interactive Session Timeout
+      lineinfile:
+        path: /etc/profile.d/tmout.sh
+        create: true
+        regexp: TMOUT=
+        line: declare -xr TMOUT={{ var_accounts_tmout }}
+        state: present
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+        - DISA-STIG-UBTU-20-010013
+        - NIST-800-171-3.1.11
+        - NIST-800-53-AC-12
+        - NIST-800-53-AC-2(5)
+        - NIST-800-53-CM-6(a)
+        - NIST-800-53-SC-10
+        - PCI-DSSv4-8.6.1
+        - accounts_tmout
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+        - restrict_strategy
+
+    - name: Find /var/log/ file(s)
+      command: find -H /var/log/ -maxdepth 1 -perm /u+xs,g+xws,o+xwrt  -type f -regex ".*"
+      register: files_found
+      changed_when: false
+      failed_when: false
+      check_mode: false
+      tags:
+        - DISA-STIG-UBTU-20-010416
+        - NIST-800-53-SI-11(a)
+        - NIST-800-53-SI-11(b)
+        - NIST-800-53-SI-11.1(iii)
+        - configure_strategy
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+        - permissions_local_var_log
+
+    - name: Set permissions for /var/log/ file(s)
+      file:
+        path: '{{ item }}'
+        mode: u-xs,g-xws,o-xwrt
+        state: file
+      with_items:
+        - '{{ files_found.stdout_lines }}'
+      tags:
+        - DISA-STIG-UBTU-20-010416
+        - NIST-800-53-SI-11(a)
+        - NIST-800-53-SI-11(b)
+        - NIST-800-53-SI-11.1(iii)
+        - configure_strategy
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+        - permissions_local_var_log
+
+    - name: Gather the package facts
+      package_facts:
+        manager: auto
+      tags:
+        - NIST-800-53-AU-8(1)(a)
+        - NIST-800-53-CM-6(a)
+        - PCI-DSS-Req-10.4.3
+        - PCI-DSSv4-10.6.2
+        - chronyd_specify_remote_server
+        - configure_strategy
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+
+    - name: XCCDF Value var_multiple_time_servers # promote to variable
+      set_fact:
+        var_multiple_time_servers: !!str 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org,3.pool.ntp.org
+      tags:
+        - always
+
+    - name: Detect if chrony is already configured with pools or servers
+      find:
+        path: /etc
+        patterns: chrony.conf
+        contains: ^[\s]*(?:server|pool)[\s]+[\w]+
+      register: chrony_servers
+      when:
+        - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        - '"chrony" in ansible_facts.packages'
+      tags:
+        - NIST-800-53-AU-8(1)(a)
+        - NIST-800-53-CM-6(a)
+        - PCI-DSS-Req-10.4.3
+        - PCI-DSSv4-10.6.2
+        - chronyd_specify_remote_server
+        - configure_strategy
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+
+    - name: Configure remote time servers
+      lineinfile:
+        path: /etc/chrony/chrony.conf
+        line: server {{ item }}
+        state: present
+        create: true
+      loop: '{{ var_multiple_time_servers.split(",") }}'
+      when:
+        - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        - '"chrony" in ansible_facts.packages'
+        - chrony_servers.matched == 0
+      tags:
+        - NIST-800-53-AU-8(1)(a)
+        - NIST-800-53-CM-6(a)
+        - PCI-DSS-Req-10.4.3
+        - PCI-DSSv4-10.6.2
+        - chronyd_specify_remote_server
+        - configure_strategy
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
