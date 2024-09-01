@@ -5686,36 +5686,36 @@
       - medium_severity
       - no_reboot_needed
     
-    - name: Block Disable service autofs
-      block:
-    
-      - name: Disable service autofs
-        block:
-    
-        - name: Disable service autofs
-          systemd:
-            name: autofs.service
-            enabled: 'no'
-            state: stopped
-            masked: 'yes'
-        rescue:
-    
-        - name: Intentionally ignored previous 'Disable service autofs' failure, service
-            was already disabled
-          meta: noop
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.4.6
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - NIST-800-53-MP-7
-      - disable_strategy
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - service_autofs_disabled
+#    - name: Block Disable service autofs
+#      block:
+#    
+#      - name: Disable service autofs
+#        block:
+#    
+#        - name: Disable service autofs
+#          systemd:
+#            name: autofs.service
+#            enabled: 'no'
+#            state: stopped
+#            masked: 'yes'
+#        rescue:
+#    
+#        - name: Intentionally ignored previous 'Disable service autofs' failure, service
+#            was already disabled
+#          meta: noop
+#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+#      tags:
+#      - NIST-800-171-3.4.6
+#      - NIST-800-53-CM-6(a)
+#      - NIST-800-53-CM-7(a)
+#      - NIST-800-53-CM-7(b)
+#      - NIST-800-53-MP-7
+#      - disable_strategy
+#      - low_complexity
+#      - low_disruption
+#      - medium_severity
+#      - no_reboot_needed
+#      - service_autofs_disabled
     
     - name: Unit Socket Exists - autofs.socket
       command: systemctl -q list-unit-files autofs.socket
