@@ -1,5 +1,5 @@
 ---
-- name: Run InSpec Role
+- name: Run OpenSCAP
   hosts: all
   tasks:
     - name: Update and upgrade packages
@@ -16,10 +16,6 @@
       ansible.builtin.command: which oscap
       register: oscap_location
       ignore_errors: yes
-
-    - name: Display OpenSCAP version
-      ansible.builtin.command: oscap -V
-      when: oscap_location.rc == 0
 
     - name: Install SCAP security guide for Debian-based OS
       ansible.builtin.apt:
@@ -72,7 +68,7 @@
     - name: Run STIG scan with OpenSCAP
       ansible.builtin.command: >
         oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis_level1_server
-        --report /tmp/{{ ansible_hostname }}-{{ ansible_date_time['iso8601'] }}-report.html
+        --report /tmp/{{ ansible_hostname }}-report.html
         /usr/share/xml/scap/ssg/content/scap-security-guide-0.1.69/ssg-ubuntu2004-ds-1.2.xml
       register: scan_result
       ignore_errors: yes
@@ -81,8 +77,31 @@
       ansible.builtin.debug:
         var: scan_result.rc
 
-    - name: Provide guidance on what to do next
-      ansible.builtin.debug:
-        msg: >
-          The STIG scan has completed. Review the report.html file in your local
-          directory for detailed results.
+    - name: Slurp the report from the node
+      ansible.builtin.slurp:
+        src: /tmp/{{ ansible_hostname }}-report.html
+      register: slurp_report
+
+    - name: Create reports directory on the master node
+      ansible.builtin.file:
+        path: /home/master/reports
+        state: directory
+        mode: '0755'
+      delegate_to: master
+      remote_user: master
+      run_once: true
+
+    - name: Ensure correct ownership on the reports directory
+      ansible.builtin.command:
+        cmd: chown -R master:master /home/master/reports
+      delegate_to: master
+      remote_user: master
+      run_once: true
+
+    - name: Write report to master node
+      ansible.builtin.copy:
+        content: "{{ slurp_report.content | b64decode }}"
+        dest: /home/master/reports/{{ inventory_hostname }}-{{ ansible_date_time.iso8601 }}-report.html
+        mode: '0664'
+      delegate_to: master
+      remote_user: master
