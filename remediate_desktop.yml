@@ -26,6 +26,7 @@
 
 
  - hosts: all
+   become: true
    vars:
       var_sudo_logfile: !!str /var/log/sudo.log
       remote_login_banner_text: !!str ^Authorized[\s\n]+uses[\s\n]+only\.[\s\n]+All[\s\n]+activity[\s\n]+may[\s\n]+be[\s\n]+monitored[\s\n]+and[\s\n]+reported\.$
