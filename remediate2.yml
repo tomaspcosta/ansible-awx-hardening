@@ -1,0 +1,204 @@
+---
+- name: Reboot hosts
+  hosts: all
+  become: yes
+  vars:
+    # Promote variables
+    sshd_strong_kex: ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256
+    var_multiple_time_servers: 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org,3.pool.ntp.org
+    var_accounts_tmout: 900
+    var_accounts_user_umask: 027
+  tasks:
+    - name: Use Only Strong Key Exchange algorithms
+      block:
+        - name: Check for duplicate values
+          lineinfile:
+            path: /etc/ssh/sshd_config
+            create: false
+            regexp: (?i)^\s*KexAlgorithms\s+
+            state: absent
+          check_mode: true
+          changed_when: false
+          register: dupes
+
+        - name: Deduplicate values from /etc/ssh/sshd_config
+          lineinfile:
+            path: /etc/ssh/sshd_config
+            create: false
+            regexp: (?i)^\s*KexAlgorithms\s+
+            state: absent
+          when: dupes.found is defined and dupes.found > 1
+
+        - name: Insert correct line to /etc/ssh/sshd_config
+          lineinfile:
+            path: /etc/ssh/sshd_config
+            create: true
+            regexp: (?i)^\s*KexAlgorithms\s+
+            line: KexAlgorithms {{ sshd_strong_kex }}
+            state: present
+            insertbefore: ^[#\s]*Match
+            validate: /usr/sbin/sshd -t -f %s
+          when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+        - PCI-DSS-Req-2.3
+        - PCI-DSSv4-2.2.7
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+        - restrict_strategy
+        - sshd_use_strong_kex
+
+    - name: Gather the package facts
+      package_facts:
+        manager: auto
+      tags:
+        - NIST-800-53-AU-8(1)(a)
+        - NIST-800-53-CM-6(a)
+        - PCI-DSS-Req-10.4.3
+        - PCI-DSSv4-10.6.2
+        - chronyd_specify_remote_server
+        - configure_strategy
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+
+    - name: Detect if chrony is already configured with pools or servers
+      find:
+        path: /etc
+        patterns: chrony.conf
+        contains: ^[\s]*(?:server|pool)[\s]+[\w]+
+      register: chrony_servers
+      when:
+        - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        - '"chrony" in ansible_facts.packages'
+      tags:
+        - NIST-800-53-AU-8(1)(a)
+        - NIST-800-53-CM-6(a)
+        - PCI-DSS-Req-10.4.3
+        - PCI-DSSv4-10.6.2
+        - chronyd_specify_remote_server
+        - configure_strategy
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+
+    - name: Configure remote time servers
+      lineinfile:
+        path: /etc/chrony/chrony.conf
+        line: server {{ item }}
+        state: present
+        create: true
+      loop: '{{ var_multiple_time_servers.split(",") }}'
+      when:
+        - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        - '"chrony" in ansible_facts.packages'
+        - chrony_servers.matched == 0
+      tags:
+        - NIST-800-53-AU-8(1)(a)
+        - NIST-800-53-CM-6(a)
+        - PCI-DSS-Req-10.4.3
+        - PCI-DSSv4-10.6.2
+        - chronyd_specify_remote_server
+        - configure_strategy
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+
+    - name: Correct any occurrence of TMOUT in /etc/profile
+      replace:
+        path: /etc/profile
+        regexp: ^[^#].*TMOUT=.*
+        replace: declare -xr TMOUT={{ var_accounts_tmout }}
+      register: profile_replaced
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+        - DISA-STIG-UBTU-20-010013
+        - NIST-800-171-3.1.11
+        - NIST-800-53-AC-12
+        - NIST-800-53-AC-2(5)
+        - NIST-800-53-CM-6(a)
+        - NIST-800-53-SC-10
+        - PCI-DSSv4-8.6.1
+        - accounts_tmout
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+        - restrict_strategy
+
+    - name: Set Interactive Session Timeout
+      lineinfile:
+        path: /etc/profile.d/tmout.sh
+        create: true
+        regexp: TMOUT=
+        line: declare -xr TMOUT={{ var_accounts_tmout }}
+        state: present
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+        - DISA-STIG-UBTU-20-010013
+        - NIST-800-171-3.1.11
+        - NIST-800-53-AC-12
+        - NIST-800-53-AC-2(5)
+        - NIST-800-53-CM-6(a)
+        - NIST-800-53-SC-10
+        - PCI-DSSv4-8.6.1
+        - accounts_tmout
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+        - restrict_strategy
+
+    - name: Check if umask in /etc/csh.cshrc is already set
+      ansible.builtin.lineinfile:
+        path: /etc/csh.cshrc
+        regexp: ^(\s*)umask\s+.*
+        state: absent
+      check_mode: true
+      changed_when: false
+      register: umask_replace
+      tags:
+        - NIST-800-53-AC-6(1)
+        - NIST-800-53-CM-6(a)
+        - accounts_umask_etc_csh_cshrc
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+        - restrict_strategy
+
+    - name: Replace user umask in /etc/csh.cshrc
+      ansible.builtin.replace:
+        path: /etc/csh.cshrc
+        regexp: ^(\s*)umask(\s+).*
+        replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
+      when: umask_replace.found > 0
+      tags:
+        - NIST-800-53-AC-6(1)
+        - NIST-800-53-CM-6(a)
+        - accounts_umask_etc_csh_cshrc
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+        - restrict_strategy
+
+    - name: Ensure the Default umask is Appended Correctly
+      ansible.builtin.lineinfile:
+        create: true
+        path: /etc/csh.cshrc
+        line: umask {{ var_accounts_user_umask }}
+      when: umask_replace.found == 0
+      tags:
+        - NIST-800-53-AC-6(1)
+        - NIST-800-53-CM-6(a)
+        - accounts_umask_etc_csh_cshrc
+        - low_complexity
+        - low_disruption
+        - medium_severity
+        - no_reboot_needed
+        - restrict_strategy
