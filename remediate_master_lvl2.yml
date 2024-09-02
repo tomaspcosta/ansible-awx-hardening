@@ -136,7 +136,7 @@
       - no_reboot_needed
       - package_aide_installed
     
-   - name: Ensure AIDE is installed
+    - name: Ensure AIDE is installed
      package:
        name: '{{ item }}'
        state: present
