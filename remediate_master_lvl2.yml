@@ -21530,7 +21530,6 @@
         var_nftables_base_chain_names: !!str input,forward,output
       tags:
         - always
-    - name: XCCDF Value var_nftables_base_
     - name: XCCDF Value var_nftables_base_chain_names # promote to variable
       set_fact:
         var_nftables_base_chain_names: !!str input,forward,output
