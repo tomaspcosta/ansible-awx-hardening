@@ -779,8 +779,7 @@
           line: auth    required    pam_tally2.so
         register: result_pam_module_add
         when:
-        - result_pam_line_other_control_present.found == 0 or result_pam_line_other_control_present.found
-          > 1
+        - result_pam_line_other_control_present.found == 0 or result_pam_line_other_control_present.found > 1
     
       - name: Set Deny For Failed Password Attempts - Ensure authselect changes are applied
         ansible.builtin.command:
@@ -925,8 +924,7 @@
           line: auth    required    pam_tally2.so
         register: result_pam_module_add
         when:
-        - result_pam_line_other_control_present.found == 0 or result_pam_line_other_control_present.found
-          > 1
+        - result_pam_line_other_control_present.found == 0 or result_pam_line_other_control_present.found > 1
     
       - name: Set Deny For Failed Password Attempts - Ensure authselect changes are applied
         ansible.builtin.command:
@@ -1070,8 +1068,7 @@
           line: account    required    pam_tally2.so
         register: result_pam_module_add
         when:
-        - result_pam_line_other_control_present.found == 0 or result_pam_line_other_control_present.found
-          > 1
+        - result_pam_line_other_control_present.found == 0 or result_pam_line_other_control_present.found > 1
     
       - name: Set Deny For Failed Password Attempts - Ensure authselect changes are applied
         ansible.builtin.command:
@@ -1892,91 +1889,91 @@
       - no_reboot_needed
       - restrict_strategy
     
-    - name: Replace user umask in /etc/bashrc
-      ansible.builtin.replace:
-        path: /etc/bashrc
-        regexp: ^(\s*)umask(\s+).*
-        replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
-      when: umask_replace.found > 0
-      tags:
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - PCI-DSSv4-8.6.1
-      - accounts_umask_etc_bashrc
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
-    
-    - name: Ensure the Default umask is Appended Correctly
-      ansible.builtin.lineinfile:
-        create: true
-        path: /etc/bashrc
-        line: umask {{ var_accounts_user_umask }}
-      when: umask_replace.found == 0
-      tags:
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - PCI-DSSv4-8.6.1
-      - accounts_umask_etc_bashrc
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
-    
-    
-    
-    - name: Check if umask in /etc/csh.cshrc is already set
-      ansible.builtin.lineinfile:
-        path: /etc/csh.cshrc
-        regexp: ^(\s*)umask\s+.*
-        state: absent
-      check_mode: true
-      changed_when: false
-      register: umask_replace
-      tags:
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - accounts_umask_etc_csh_cshrc
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
-    
-    - name: Replace user umask in /etc/csh.cshrc
-      ansible.builtin.replace:
-        path: /etc/csh.cshrc
-        regexp: ^(\s*)umask(\s+).*
-        replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
-      when: umask_replace.found > 0
-      tags:
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - accounts_umask_etc_csh_cshrc
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
-    
-    - name: Ensure the Default umask is Appended Correctly
-      ansible.builtin.lineinfile:
-        create: true
-        path: /etc/csh.cshrc
-        line: umask {{ var_accounts_user_umask }}
-      when: umask_replace.found == 0
-      tags:
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - accounts_umask_etc_csh_cshrc
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+#    - name: Replace user umask in /etc/bashrc
+#      ansible.builtin.replace:
+#        path: /etc/bashrc
+#        regexp: ^(\s*)umask(\s+).*
+#        replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
+#      when: umask_replace.found > 0
+#      tags:
+#      - NIST-800-53-AC-6(1)
+#      - NIST-800-53-CM-6(a)
+#      - PCI-DSSv4-8.6.1
+#      - accounts_umask_etc_bashrc
+#      - low_complexity
+#      - low_disruption
+#      - medium_severity
+#      - no_reboot_needed
+#      - restrict_strategy
+#    
+#    - name: Ensure the Default umask is Appended Correctly
+#      ansible.builtin.lineinfile:
+#        create: true
+#        path: /etc/bashrc
+#        line: umask {{ var_accounts_user_umask }}
+#      when: umask_replace.found == 0
+#      tags:
+#      - NIST-800-53-AC-6(1)
+#      - NIST-800-53-CM-6(a)
+#      - PCI-DSSv4-8.6.1
+#      - accounts_umask_etc_bashrc
+#      - low_complexity
+#      - low_disruption
+#      - medium_severity
+#      - no_reboot_needed
+#      - restrict_strategy
+#    
+#    
+#    
+#    - name: Check if umask in /etc/csh.cshrc is already set
+#      ansible.builtin.lineinfile:
+#        path: /etc/csh.cshrc
+#        regexp: ^(\s*)umask\s+.*
+#        state: absent
+#      check_mode: true
+#      changed_when: false
+#      register: umask_replace
+#      tags:
+#      - NIST-800-53-AC-6(1)
+#      - NIST-800-53-CM-6(a)
+#      - accounts_umask_etc_csh_cshrc
+#      - low_complexity
+#      - low_disruption
+#      - medium_severity
+#      - no_reboot_needed
+#      - restrict_strategy
+#    
+#    - name: Replace user umask in /etc/csh.cshrc
+#      ansible.builtin.replace:
+#        path: /etc/csh.cshrc
+#        regexp: ^(\s*)umask(\s+).*
+#        replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
+#      when: umask_replace.found > 0
+#     tags:
+#      - NIST-800-53-AC-6(1)
+#      - NIST-800-53-CM-6(a)
+#      - accounts_umask_etc_csh_cshrc
+#      - low_complexity
+#      - low_disruption
+#      - medium_severity
+#      - no_reboot_needed
+#      - restrict_strategy
+#    
+#    - name: Ensure the Default umask is Appended Correctly
+#      ansible.builtin.lineinfile:
+#        create: true
+#        path: /etc/csh.cshrc
+#        line: umask {{ var_accounts_user_umask }}
+#      when: umask_replace.found == 0
+#      tags:
+#      - NIST-800-53-AC-6(1)
+#      - NIST-800-53-CM-6(a)
+#      - accounts_umask_etc_csh_cshrc
+#      - low_complexity
+#      - low_disruption
+#      - medium_severity
+#      - no_reboot_needed
+#      - restrict_strategy
     
     - name: Gather the package facts
       package_facts:
@@ -1994,66 +1991,66 @@
       - restrict_strategy
     
     
-    - name: Check if UMASK is already set
-      ansible.builtin.lineinfile:
-        path: /etc/login.defs
-        regexp: ^(\s*)UMASK\s+.*
-        state: absent
-      check_mode: true
-      changed_when: false
-      register: result_umask_is_set
-      when: '"login" in ansible_facts.packages'
-      tags:
-      - DISA-STIG-UBTU-20-010016
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - PCI-DSSv4-8.6.1
-      - accounts_umask_etc_login_defs
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
-    
-    - name: Replace user UMASK in /etc/login.defs
-      ansible.builtin.replace:
-        path: /etc/login.defs
-        regexp: ^(\s*)UMASK(\s+).*
-        replace: \g<1>UMASK\g<2>{{ var_accounts_user_umask }}
-      when:
-      - '"login" in ansible_facts.packages'
-      - result_umask_is_set.found > 0
-      tags:
-      - DISA-STIG-UBTU-20-010016
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - PCI-DSSv4-8.6.1
-      - accounts_umask_etc_login_defs
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
-    
-    - name: Ensure the Default UMASK is Appended Correctly
-      ansible.builtin.lineinfile:
-        create: true
-        path: /etc/login.defs
-        line: UMASK {{ var_accounts_user_umask }}
-      when:
-      - '"login" in ansible_facts.packages'
-      - result_umask_is_set.found == 0
-      tags:
-      - DISA-STIG-UBTU-20-010016
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - PCI-DSSv4-8.6.1
-      - accounts_umask_etc_login_defs
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+#    - name: Check if UMASK is already set
+#      ansible.builtin.lineinfile:
+#        path: /etc/login.defs
+#        regexp: ^(\s*)UMASK\s+.*
+#        state: absent
+#      check_mode: true
+#      changed_when: false
+#      register: result_umask_is_set
+#      when: '"login" in ansible_facts.packages'
+#      tags:
+#      - DISA-STIG-UBTU-20-010016
+#      - NIST-800-53-AC-6(1)
+#      - NIST-800-53-CM-6(a)
+#      - PCI-DSSv4-8.6.1
+#      - accounts_umask_etc_login_defs
+#      - low_complexity
+#      - low_disruption
+#      - medium_severity
+#      - no_reboot_needed
+#      - restrict_strategy
+#    
+#    - name: Replace user UMASK in /etc/login.defs
+#      ansible.builtin.replace:
+#        path: /etc/login.defs
+#        regexp: ^(\s*)UMASK(\s+).*
+#        replace: \g<1>UMASK\g<2>{{ var_accounts_user_umask }}
+#      when:
+#      - '"login" in ansible_facts.packages'
+#      - result_umask_is_set.found > 0
+#      tags:
+#      - DISA-STIG-UBTU-20-010016
+#      - NIST-800-53-AC-6(1)
+#      - NIST-800-53-CM-6(a)
+#      - PCI-DSSv4-8.6.1
+#      - accounts_umask_etc_login_defs
+#      - low_complexity
+#      - low_disruption
+#      - medium_severity
+#      - no_reboot_needed
+#      - restrict_strategy
+#    
+#    - name: Ensure the Default UMASK is Appended Correctly
+#      ansible.builtin.lineinfile:
+#        create: true
+#        path: /etc/login.defs
+#        line: UMASK {{ var_accounts_user_umask }}
+#      when:
+#      - '"login" in ansible_facts.packages'
+#      - result_umask_is_set.found == 0
+#      tags:
+#      - DISA-STIG-UBTU-20-010016
+#      - NIST-800-53-AC-6(1)
+#      - NIST-800-53-CM-6(a)
+#      - PCI-DSSv4-8.6.1
+#      - accounts_umask_etc_login_defs
+#      - low_complexity
+#      - low_disruption
+#      - medium_severity
+#      - no_reboot_needed
+#      - restrict_strategy
     
     
     
@@ -4467,7 +4464,6 @@
         var_nftables_base_chain_names: !!str input,forward,output
       tags:
         - always
-    - name: XCCDF Value var_nftables_base_
     - name: XCCDF Value var_nftables_base_chain_names # promote to variable
       set_fact:
         var_nftables_base_chain_names: !!str input,forward,output
@@ -4516,11 +4512,12 @@
         - always
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
-      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
+      ansible.builtin.shell: nft list tables | grep \'{{ var_nftables_family }} {{ var_nftables_table }}\'
       register: existing_nftables
       changed_when: false
       failed_when: false
-      when: '"nftables" in ansible_facts.p
+      when: '"nftables" in ansible_facts.packages'
+      
     - name: XCCDF Value var_nftables_base_chain_priorities # promote to variable
       set_fact:
         var_nftables_base_chain_priorities: !!str 0,0,0
@@ -4583,8 +4580,8 @@
       - restrict_strategy
       - set_nftables_base_chain
     
-    - name: Ensure Base Chains Exist for Nftables - Add Base Chains
-      ansible.builtin.command: nft 'add chain {{ var_nftables_famil
+   # - name: Ensure Base Chains Exist for Nftables - Add Base Chains
+   #   ansible.builtin.command: nft 'add chain {{ var_nftables_famil
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
       ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
@@ -4840,50 +4837,50 @@
       - unknown_strategy
       - wireless_disable_interfaces
     
-    - name: Ensure NetworkManager is installed
-      ansible.builtin.package:
-        name: '{{ item }}'
-        state: present
-      with_items:
-      - NetworkManager
-      tags:
-      - DISA-STIG-UBTU-20-010455
-      - NIST-800-171-3.1.16
-      - NIST-800-53-AC-18(3)
-      - NIST-800-53-AC-18(a)
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - NIST-800-53-MP-7
-      - PCI-DSS-Req-1.3.3
-      - PCI-DSSv4-1.4.3
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - no_reboot_needed
-      - unknown_strategy
-      - wireless_disable_interfaces
-    
-    - name: Deactivate Wireless Network Interfaces
-      command: nmcli radio wifi off
-      when: '''NetworkManager'' in ansible_facts.packages'
-      tags:
-      - DISA-STIG-UBTU-20-010455
-      - NIST-800-171-3.1.16
-      - NIST-800-53-AC-18(3)
-      - NIST-800-53-AC-18(a)
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - NIST-800-53-MP-7
-      - PCI-DSS-Req-1.3.3
-      - PCI-DSSv4-1.4.3
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - no_reboot_needed
-      - unknown_strategy
-      - wireless_disable_interfaces
+#    - name: Ensure NetworkManager is installed
+#      ansible.builtin.package:
+#        name: '{{ item }}'
+#        state: present
+#      with_items:
+#      - NetworkManager
+#      tags:
+#     - DISA-STIG-UBTU-20-010455
+#      - NIST-800-171-3.1.16
+#      - NIST-800-53-AC-18(3)
+#      - NIST-800-53-AC-18(a)
+#      - NIST-800-53-CM-6(a)
+#      - NIST-800-53-CM-7(a)
+#      - NIST-800-53-CM-7(b)
+#      - NIST-800-53-MP-7
+#      - PCI-DSS-Req-1.3.3
+#      - PCI-DSSv4-1.4.3
+#      - low_complexity
+#      - medium_disruption
+#      - medium_severity
+#      - no_reboot_needed
+#      - unknown_strategy
+#      - wireless_disable_interfaces
+#    
+#    - name: Deactivate Wireless Network Interfaces
+#      command: nmcli radio wifi off
+#      when: '''NetworkManager'' in ansible_facts.packages'
+#      tags:
+#      - DISA-STIG-UBTU-20-010455
+#      - NIST-800-171-3.1.16
+#      - NIST-800-53-AC-18(3)
+#      - NIST-800-53-AC-18(a)
+#      - NIST-800-53-CM-6(a)
+#      - NIST-800-53-CM-7(a)
+#      - NIST-800-53-CM-7(b)
+#      - NIST-800-53-MP-7
+#      - PCI-DSS-Req-1.3.3
+#      - PCI-DSSv4-1.4.3
+#      - low_complexity
+#      - medium_disruption
+#      - medium_severity
+#      - no_reboot_needed
+#      - unknown_strategy
+#      - wireless_disable_interfaces
     
     - name: Find /var/log/ file(s)
       command: find -H /var/log/ -maxdepth 1 -perm /u+xs,g+xws,o+xwrt  -type f -regex
@@ -5972,8 +5969,7 @@
       - mount_option_dev_shm_nodev
       - no_reboot_needed
     
-    - name: 'Add nodev Option to /dev/shm: Make sure nodev option is part of the to /dev/shm
-        options'
+    - name: 'Add nodev Option to /dev/shm: Make sure nodev option is part of the to /dev/shm options'
       set_fact:
         mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nodev''}) }}'
       when:
@@ -6002,8 +5998,7 @@
         fstype: '{{ mount_info.fstype }}'
       when:
       - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("" |
-        length == 0)
+      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("" | length == 0)
       tags:
       - NIST-800-53-AC-6
       - NIST-800-53-AC-6(1)
@@ -6124,8 +6119,7 @@
         fstype: '{{ mount_info.fstype }}'
       when:
       - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("" |
-        length == 0)
+      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("" | length == 0)
       tags:
       - NIST-800-53-AC-6
       - NIST-800-53-AC-6(1)
@@ -6245,8 +6239,7 @@
         fstype: '{{ mount_info.fstype }}'
       when:
       - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("" |
-        length == 0)
+      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("" | length == 0)
       tags:
       - NIST-800-53-AC-6
       - NIST-800-53-AC-6(1)
@@ -6346,8 +6339,7 @@
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/home" in ansible_mounts | map(attribute="mount") | list )
-      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab"
-        | length == 0)
+      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
       tags:
       - configure_strategy
       - high_disruption
@@ -6464,8 +6456,7 @@
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/tmp" in ansible_mounts | map(attribute="mount") | list )
-      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab"
-        | length == 0)
+      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
       tags:
       - NIST-800-53-AC-6
       - NIST-800-53-AC-6(1)
@@ -6589,8 +6580,7 @@
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/tmp" in ansible_mounts | map(attribute="mount") | list )
-      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab"
-        | length == 0)
+      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
       tags:
       - NIST-800-53-AC-6
       - NIST-800-53-AC-6(1)
@@ -6714,8 +6704,7 @@
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/tmp" in ansible_mounts | map(attribute="mount") | list )
-      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab"
-        | length == 0)
+      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
       tags:
       - NIST-800-53-AC-6
       - NIST-800-53-AC-6(1)
@@ -6816,8 +6805,7 @@
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
-      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab"
-        | length == 0)
+      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
       tags:
       - configure_strategy
       - high_disruption
@@ -6913,8 +6901,7 @@
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
-      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab"
-        | length == 0)
+      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
       tags:
       - configure_strategy
       - high_disruption
@@ -7010,8 +6997,7 @@
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
-      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab"
-        | length == 0)
+      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
       tags:
       - configure_strategy
       - high_disruption
