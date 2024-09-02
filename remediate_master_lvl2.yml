@@ -1,5 +1,5 @@
 ---
-###############################################################################
+################################################################################
 #
 # Ansible remediation role for profile xccdf_org.ssgproject.content_profile_cis_level2_server
 # Profile Title:  CIS Ubuntu 20.04 Level 2 Server Benchmark
