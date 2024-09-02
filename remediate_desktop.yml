@@ -4615,8 +4615,7 @@
     
     - name: Ensure Base Chains Exist for Nftables - Add Base Chains
       ansible.builtin.command: nft 'add chain {{ var_nftables_family }} {{ var_nftables_table
-        }} {{ item.0 }} { type {{ item.1 }} hook {{ item.2 }} priority {{ item.3 }} ;
-        policy {{ item.4 }} ; }'
+        }} {{ item.0 }} { type {{ item.1 }} hook {{ item.2 }} priority {{ item.3 }} ; policy {{ item.4 }} ; }'
       with_together:
       - '{{ var_nftables_base_chain_names.split(",") }}'
       - '{{ var_nftables_base_chain_types.split(",") }}'
@@ -4649,8 +4648,7 @@
       - set_nftables_loopback_traffic
     
     - name: Create Rule to Drop Input IP Address from Loopback
-      ansible.builtin.command: nft insert rule inet filter input ip saddr 127.0.0.0/8
-        counter drop
+      ansible.builtin.command: nft insert rule inet filter input ip saddr 127.0.0.0/8 counter drop
       when: '"nftables" in ansible_facts.packages'
       tags:
       - PCI-DSS-Req-1.4.1
@@ -4742,8 +4740,7 @@
       - set_nftables_table
     
     - name: Set Nftable Table
-      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table
-        }}
+      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table }}
       when:
       - '"nftables" in ansible_facts.packages'
       - existing_nftables.stdout_lines | length == 0
@@ -5978,8 +5975,7 @@
     - name: 'Add nodev Option to /dev/shm: Make sure nodev option is part of the to /dev/shm
         options'
       set_fact:
-        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nodev''
-          }) }}'
+        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nodev''}) }}'
       when:
       - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
       - mount_info is defined and "nodev" not in mount_info.options
@@ -6222,8 +6218,7 @@
     - name: 'Add nosuid Option to /dev/shm: Make sure nosuid option is part of the to
         /dev/shm options'
       set_fact:
-        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nosuid''
-          }) }}'
+        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nosuid''}) }}'
       when:
       - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
       - mount_info is defined and "nosuid" not in mount_info.options
@@ -6328,8 +6323,7 @@
     - name: 'Add nodev Option to /home: Make sure nodev option is part of the to /home
         options'
       set_fact:
-        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nodev''
-          }) }}'
+        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nodev''}) }}'
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/home" in ansible_mounts | map(attribute="mount") | list )
@@ -6441,8 +6435,7 @@
     
     - name: 'Add nodev Option to /tmp: Make sure nodev option is part of the to /tmp options'
       set_fact:
-        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nodev''
-          }) }}'
+        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nodev''}) }}'
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/tmp" in ansible_mounts | map(attribute="mount") | list )
@@ -6567,8 +6560,7 @@
     - name: 'Add noexec Option to /tmp: Make sure noexec option is part of the to /tmp
         options'
       set_fact:
-        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',noexec''
-          }) }}'
+        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',noexec''}) }}'
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/tmp" in ansible_mounts | map(attribute="mount") | list )
@@ -6693,8 +6685,7 @@
     - name: 'Add nosuid Option to /tmp: Make sure nosuid option is part of the to /tmp
         options'
       set_fact:
-        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nosuid''
-          }) }}'
+        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nosuid''}) }}'
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/tmp" in ansible_mounts | map(attribute="mount") | list )
@@ -6802,8 +6793,7 @@
     - name: 'Add nodev Option to /var/tmp: Make sure nodev option is part of the to /var/tmp
         options'
       set_fact:
-        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nodev''
-          }) }}'
+        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nodev''}) }}'
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
@@ -6900,8 +6890,7 @@
     - name: 'Add noexec Option to /var/tmp: Make sure noexec option is part of the to
         /var/tmp options'
       set_fact:
-        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',noexec''
-          }) }}'
+        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',noexec''}) }}'
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
@@ -6998,8 +6987,7 @@
     - name: 'Add nosuid Option to /var/tmp: Make sure nosuid option is part of the to
         /var/tmp options'
       set_fact:
-        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nosuid''
-          }) }}'
+        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nosuid''}) }}'
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
