@@ -4346,17 +4346,17 @@
       - no_reboot_needed
       - package_nftables_installed
     
-#    - name: Ensure nftables is removed
-#      package:
-#        name: nftables
-#        state: absent
-#      tags:
-#      - disable_strategy
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - package_nftables_removed
+    - name: Ensure nftables is removed
+      package:
+        name: nftables
+        state: absent
+      tags:
+      - disable_strategy
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - package_nftables_removed
     
     - name: Enable service nftables
       block:
