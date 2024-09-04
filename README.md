@@ -1,39 +1,39 @@
 # Ansible Hardening
 
-Este repositório contém uma configuração do Ansible para realizar o hardening de sistemas Ubuntu 20.04, seguindo as diretrizes dos CIS Benchmarks. O projeto utiliza roles e collections do Ansible para configurar e fortalecer a segurança dos servidores, e inclui avaliações de segurança com OpenSCAP.
+This repository contains an Ansible configuration to perform hardening on Ubuntu 20.04 systems, following the CIS Benchmarks guidelines. The project uses Ansible roles and collections to configure and strengthen server security, and includes security assessments with OpenSCAP.
 
-## Estrutura do Projeto
+## Project Structure
 
-O repositório está organizado da seguinte forma:
+The repository is organized as follows:
 
-- `/requirements.yml`: Define as collections do Ansible necessárias.
-- `/group_vars/cis.yml`: Variáveis globais para a configuração de hardening.
-- `/host_vars/desktop1/cis.yml`: Variáveis específicas para o host `desktop1`.
-- `/host_vars/master/cis.yml`: Variáveis específicas para o host `master`.
-- `/hosts/hosts.yml`: Arquivo de inventário do Ansible.
-- `/roles/requirements.yml`: Define as roles necessárias para o projeto.
-- `/ansible.cfg`: Configurações do Ansible.
-- `/hardening.yml`: Playbook principal para aplicar o hardening.
-- `/openscap_report_desktop.yml`: Playbook para executar avaliações de segurança com OpenSCAP.
-- `/openscap_report_servers.yml`: Playbook para executar avaliações de segurança com OpenSCAP.
-- `/poweroff_hosts.yml`: Playbook para desligar os hosts.
-- `/reboot_hosts.yml`: Playbook para reiniciar os hosts.
-- `/remediate_desktop.yml`:
-- `/remediate_hosts.yml`: 
-- `/remediate_master.yml`:
-- `/remediate_master_lvl2.yml`: 
+- `/requirements.yml`: Defines the necessary Ansible collections.
+- `/group_vars/cis.yml`: Global variables for hardening configuration.
+- `/host_vars/desktop1/cis.yml`: Variables specific to the `desktop1` host.
+- `/host_vars/master/cis.yml`: Variables specific to the `master` host.
+- `/hosts/hosts.yml`: Ansible inventory file.
+- `/roles/requirements.yml`: Defines the roles required for the project.
+- `/ansible.cfg`: Ansible configuration file.
+- `/hardening.yml`: Main playbook to apply hardening.
+- `/openscap_report_desktop.yml`: Playbook to perform security assessments with OpenSCAP for desktops.
+- `/openscap_report_servers.yml`: Playbook to perform security assessments with OpenSCAP for servers.
+- `/poweroff_hosts.yml`: Playbook to power off hosts.
+- `/reboot_hosts.yml`: Playbook to reboot hosts.
+- `/remediate_desktop.yml`: Playbook to remediate desktop hosts.
+- `/remediate_hosts.yml`: Playbook to remediate general hosts.
+- `/remediate_master.yml`: Playbook to remediate the master host.
+- `/remediate_master_lvl2.yml`: Playbook for advanced remediation of the master host.
 
-## Configuração
+## Configuration
 
-1. **Inventário**: O arquivo `awx/hosts/hosts.yml` contém a definição dos hosts e grupos de hosts.
+1. **Inventory**: The file `awx/hosts/hosts.yml` contains the definition of hosts and host groups.
 
-2. **Variáveis**: As variáveis globais estão em `awx/group_vars/cis.yml`, enquanto as variáveis específicas para cada host estão em `awx/host_vars/`, neste caso para o `master` e `desktop1`.
+2. **Variables**: Global variables are in `awx/group_vars/cis.yml`, while host-specific variables are located in `awx/host_vars/`, specifically for `master` and `desktop1`.
 
-## Roles Utilizadas
+## Roles Used
 
 ### `cis-hardening`
 
-O role `cis-hardening` faz parte do repositório `ansible-lockdown`, que aplica as recomendações de segurança baseadas nos benchmarks CIS para sistemas Ubuntu.
+The `cis-hardening` role is part of the `ansible-lockdown` repository, which applies security recommendations based on CIS benchmarks for Ubuntu systems.
 
-- **Repositório**: [ansible-lockdown](https://github.com/ansible-lockdown)
+- **Repository**: [ansible-lockdown](https://github.com/ansible-lockdown)
 - **Role**: `cis-hardening`
