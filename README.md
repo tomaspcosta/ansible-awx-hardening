@@ -20,7 +20,8 @@ O repositório está organizado da seguinte forma:
 - `/reboot_hosts.yml`: Playbook para reiniciar os hosts.
 - `/remediate_desktop.yml`:
 - `/remediate_hosts.yml`: 
-- `/remediate_master.yml`: 
+- `/remediate_master.yml`:
+- `/remediate_master_lvl2.yml`: 
 
 ## Configuração
 
