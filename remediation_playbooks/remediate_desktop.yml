@@ -4486,8 +4486,7 @@
         - always
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
-      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table
-        }}'
+      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
       register: existing_nftables
       changed_when: false
       failed_when: false
@@ -4504,8 +4503,7 @@
         - always
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
-      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table
-        }}'
+      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
       register: existing_nftables
       changed_when: false
       failed_when: false
@@ -4530,8 +4528,7 @@
         - always
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
-      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table
-        }}'
+      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
       register: existing_nftables
       changed_when: false
       failed_when: false
@@ -4562,8 +4559,7 @@
       ansible.builtin.command: nft 'add chain {{ var_nftables_famil
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
-      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table
-        }}'
+      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
       register: existing_nftables
       changed_when: false
       failed_when: false
