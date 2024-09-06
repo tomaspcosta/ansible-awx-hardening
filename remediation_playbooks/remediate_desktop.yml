@@ -1862,91 +1862,91 @@
       - no_reboot_needed
       - restrict_strategy
     
-    - name: Replace user umask in /etc/bashrc
-      ansible.builtin.replace:
-        path: /etc/bashrc
-        regexp: ^(\s*)umask(\s+).*
-        replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
-      when: umask_replace.found > 0
-      tags:
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - PCI-DSSv4-8.6.1
-      - accounts_umask_etc_bashrc
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Replace user umask in /etc/bashrc
+    #   ansible.builtin.replace:
+    #     path: /etc/bashrc
+    #     regexp: ^(\s*)umask(\s+).*
+    #     replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
+    #   when: umask_replace.found > 0
+    #   tags:
+    #   - NIST-800-53-AC-6(1)
+    #   - NIST-800-53-CM-6(a)
+    #   - PCI-DSSv4-8.6.1
+    #   - accounts_umask_etc_bashrc
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
-    - name: Ensure the Default umask is Appended Correctly
-      ansible.builtin.lineinfile:
-        create: true
-        path: /etc/bashrc
-        line: umask {{ var_accounts_user_umask }}
-      when: umask_replace.found == 0
-      tags:
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - PCI-DSSv4-8.6.1
-      - accounts_umask_etc_bashrc
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Ensure the Default umask is Appended Correctly
+    #   ansible.builtin.lineinfile:
+    #     create: true
+    #     path: /etc/bashrc
+    #     line: umask {{ var_accounts_user_umask }}
+    #   when: umask_replace.found == 0
+    #   tags:
+    #   - NIST-800-53-AC-6(1)
+    #   - NIST-800-53-CM-6(a)
+    #   - PCI-DSSv4-8.6.1
+    #   - accounts_umask_etc_bashrc
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
     
     
-    - name: Check if umask in /etc/csh.cshrc is already set
-      ansible.builtin.lineinfile:
-        path: /etc/csh.cshrc
-        regexp: ^(\s*)umask\s+.*
-        state: absent
-      check_mode: true
-      changed_when: false
-      register: umask_replace
-      tags:
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - accounts_umask_etc_csh_cshrc
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Check if umask in /etc/csh.cshrc is already set
+    #   ansible.builtin.lineinfile:
+    #     path: /etc/csh.cshrc
+    #     regexp: ^(\s*)umask\s+.*
+    #     state: absent
+    #   check_mode: true
+    #   changed_when: false
+    #   register: umask_replace
+    #   tags:
+    #   - NIST-800-53-AC-6(1)
+    #   - NIST-800-53-CM-6(a)
+    #   - accounts_umask_etc_csh_cshrc
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
-    - name: Replace user umask in /etc/csh.cshrc
-      ansible.builtin.replace:
-        path: /etc/csh.cshrc
-        regexp: ^(\s*)umask(\s+).*
-        replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
-      when: umask_replace.found > 0
-      tags:
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - accounts_umask_etc_csh_cshrc
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Replace user umask in /etc/csh.cshrc
+    #   ansible.builtin.replace:
+    #     path: /etc/csh.cshrc
+    #     regexp: ^(\s*)umask(\s+).*
+    #     replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
+    #   when: umask_replace.found > 0
+    #   tags:
+    #   - NIST-800-53-AC-6(1)
+    #   - NIST-800-53-CM-6(a)
+    #   - accounts_umask_etc_csh_cshrc
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
-    - name: Ensure the Default umask is Appended Correctly
-      ansible.builtin.lineinfile:
-        create: true
-        path: /etc/csh.cshrc
-        line: umask {{ var_accounts_user_umask }}
-      when: umask_replace.found == 0
-      tags:
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - accounts_umask_etc_csh_cshrc
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Ensure the Default umask is Appended Correctly
+    #   ansible.builtin.lineinfile:
+    #     create: true
+    #     path: /etc/csh.cshrc
+    #     line: umask {{ var_accounts_user_umask }}
+    #   when: umask_replace.found == 0
+    #   tags:
+    #   - NIST-800-53-AC-6(1)
+    #   - NIST-800-53-CM-6(a)
+    #   - accounts_umask_etc_csh_cshrc
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
     - name: Gather the package facts
       package_facts:
@@ -1964,66 +1964,66 @@
       - restrict_strategy
     
     
-    - name: Check if UMASK is already set
-      ansible.builtin.lineinfile:
-        path: /etc/login.defs
-        regexp: ^(\s*)UMASK\s+.*
-        state: absent
-      check_mode: true
-      changed_when: false
-      register: result_umask_is_set
-      when: '"login" in ansible_facts.packages'
-      tags:
-      - DISA-STIG-UBTU-20-010016
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - PCI-DSSv4-8.6.1
-      - accounts_umask_etc_login_defs
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Check if UMASK is already set
+    #   ansible.builtin.lineinfile:
+    #     path: /etc/login.defs
+    #     regexp: ^(\s*)UMASK\s+.*
+    #     state: absent
+    #   check_mode: true
+    #   changed_when: false
+    #   register: result_umask_is_set
+    #   when: '"login" in ansible_facts.packages'
+    #   tags:
+    #   - DISA-STIG-UBTU-20-010016
+    #   - NIST-800-53-AC-6(1)
+    #   - NIST-800-53-CM-6(a)
+    #   - PCI-DSSv4-8.6.1
+    #   - accounts_umask_etc_login_defs
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
-    - name: Replace user UMASK in /etc/login.defs
-      ansible.builtin.replace:
-        path: /etc/login.defs
-        regexp: ^(\s*)UMASK(\s+).*
-        replace: \g<1>UMASK\g<2>{{ var_accounts_user_umask }}
-      when:
-      - '"login" in ansible_facts.packages'
-      - result_umask_is_set.found > 0
-      tags:
-      - DISA-STIG-UBTU-20-010016
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - PCI-DSSv4-8.6.1
-      - accounts_umask_etc_login_defs
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Replace user UMASK in /etc/login.defs
+    #   ansible.builtin.replace:
+    #     path: /etc/login.defs
+    #     regexp: ^(\s*)UMASK(\s+).*
+    #     replace: \g<1>UMASK\g<2>{{ var_accounts_user_umask }}
+    #   when:
+    #   - '"login" in ansible_facts.packages'
+    #   - result_umask_is_set.found > 0
+    #   tags:
+    #   - DISA-STIG-UBTU-20-010016
+    #   - NIST-800-53-AC-6(1)
+    #   - NIST-800-53-CM-6(a)
+    #   - PCI-DSSv4-8.6.1
+    #   - accounts_umask_etc_login_defs
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
-    - name: Ensure the Default UMASK is Appended Correctly
-      ansible.builtin.lineinfile:
-        create: true
-        path: /etc/login.defs
-        line: UMASK {{ var_accounts_user_umask }}
-      when:
-      - '"login" in ansible_facts.packages'
-      - result_umask_is_set.found == 0
-      tags:
-      - DISA-STIG-UBTU-20-010016
-      - NIST-800-53-AC-6(1)
-      - NIST-800-53-CM-6(a)
-      - PCI-DSSv4-8.6.1
-      - accounts_umask_etc_login_defs
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Ensure the Default UMASK is Appended Correctly
+    #   ansible.builtin.lineinfile:
+    #     create: true
+    #     path: /etc/login.defs
+    #     line: UMASK {{ var_accounts_user_umask }}
+    #   when:
+    #   - '"login" in ansible_facts.packages'
+    #   - result_umask_is_set.found == 0
+    #   tags:
+    #   - DISA-STIG-UBTU-20-010016
+    #   - NIST-800-53-AC-6(1)
+    #   - NIST-800-53-CM-6(a)
+    #   - PCI-DSSv4-8.6.1
+    #   - accounts_umask_etc_login_defs
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
     
     
