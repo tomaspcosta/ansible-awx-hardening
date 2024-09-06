@@ -2566,18 +2566,18 @@
       - no_reboot_needed
       - package_iptables-persistent_removed
     
-    - name: Ensure iptables-persistent is removed
-      package:
-        name: iptables-persistent
-        state: absent
-      when: '"iptables" in ansible_facts.packages'
-      tags:
-      - disable_strategy
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - package_iptables-persistent_removed
+    # - name: Ensure iptables-persistent is removed
+    #   package:
+    #     name: iptables-persistent
+    #     state: absent
+    #   when: '"iptables" in ansible_facts.packages'
+    #   tags:
+    #   - disable_strategy
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - package_iptables-persistent_removed
     
     - name: Gather the package facts
       package_facts:
@@ -4322,17 +4322,17 @@
       - no_reboot_needed
       - package_nftables_installed
     
-    - name: Ensure nftables is removed
-      package:
-        name: nftables
-        state: absent
-      tags:
-      - disable_strategy
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - package_nftables_removed
+    # - name: Ensure nftables is removed
+    #   package:
+    #     name: nftables
+    #     state: absent
+    #   tags:
+    #   - disable_strategy
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - package_nftables_removed
     
     - name: Enable service nftables
       block:
