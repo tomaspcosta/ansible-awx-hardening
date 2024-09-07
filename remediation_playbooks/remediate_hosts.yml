@@ -4506,12 +4506,12 @@
         - always
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
-      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table
-        }}'
+      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
       register: existing_nftables
       changed_when: false
       failed_when: false
-      when: '"nftables" in ansible_facts.p
+      when: '"nftables" in ansible_facts.packages'
+
     - name: XCCDF Value var_nftables_base_chain_priorities # promote to variable
       set_fact:
         var_nftables_base_chain_priorities: !!str 0,0,0
@@ -4540,7 +4540,8 @@
     - name: Ensure Base Chains Exist for Nftables - Set NFTables Table
       ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table }}
       when:
-      - '"nftable
+      - '"nftables" in ansible_facts.packages'
+
     - name: XCCDF Value var_nftables_base_chain_policies # promote to variable
       set_fact:
         var_nftables_base_chain_policies: !!str accept,accept,accept
@@ -4573,6 +4574,9 @@
       - no_reboot_needed
       - restrict_strategy
       - set_nftables_base_chain
+    
+    # - name: Ensure Base Chains Exist for Nftables - Add Base Chains
+    #   ansible.builtin.command: nft 'add chain {{ var_nftables_famil
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
       ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
@@ -4602,8 +4606,7 @@
       - set_nftables_base_chain
     
     - name: Ensure Base Chains Exist for Nftables - Add Base Chains
-      ansible.builtin.command: nft 'add chain {{ var_nftables_family }} {{ var_nftables_table }} {{ item.0 }} { type {{ item.1 }} hook {{ item.2 }} priority {{ item.3 }} ;
-        policy {{ item.4 }} ; }'
+      ansible.builtin.command: nft 'add chain {{ var_nftables_family }} {{ var_nftables_table }} {{ item.0 }} { type {{ item.1 }} hook {{ item.2 }} priority {{ item.3 }} ; policy {{ item.4 }} ; }'
       with_together:
       - '{{ var_nftables_base_chain_names.split(",") }}'
       - '{{ var_nftables_base_chain_types.split(",") }}'
