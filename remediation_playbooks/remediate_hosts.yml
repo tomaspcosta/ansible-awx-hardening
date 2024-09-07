@@ -26,7 +26,6 @@
 
 
  - hosts: all
-   become: true
    vars:
       var_sudo_logfile: !!str /var/log/sudo.log
       remote_login_banner_text: !!str ^Authorized[\s\n]+uses[\s\n]+only\.[\s\n]+All[\s\n]+activity[\s\n]+may[\s\n]+be[\s\n]+monitored[\s\n]+and[\s\n]+reported\.$
@@ -118,118 +117,118 @@
       - no_reboot_needed
       - package_prelink_removed
     
-    - name: Ensure aide is installed
-      package:
-        name: aide
-        state: present
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - CJIS-5.10.1.3
-      - DISA-STIG-UBTU-20-010450
-      - NIST-800-53-CM-6(a)
-      - PCI-DSS-Req-11.5
-      - PCI-DSSv4-11.5.2
-      - enable_strategy
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - package_aide_installed
+    # - name: Ensure aide is installed
+    #   package:
+    #     name: aide
+    #     state: present
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - CJIS-5.10.1.3
+    #   - DISA-STIG-UBTU-20-010450
+    #   - NIST-800-53-CM-6(a)
+    #   - PCI-DSS-Req-11.5
+    #   - PCI-DSSv4-11.5.2
+    #   - enable_strategy
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - package_aide_installed
     
-    - name: Ensure AIDE is installed
-      package:
-        name: '{{ item }}'
-        state: present
-      with_items:
-      - aide
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - CJIS-5.10.1.3
-      - NIST-800-53-CM-6(a)
-      - PCI-DSS-Req-11.5
-      - PCI-DSSv4-11.5.2
-      - aide_build_database
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Ensure AIDE is installed
+    #   package:
+    #     name: '{{ item }}'
+    #     state: present
+    #   with_items:
+    #   - aide
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - CJIS-5.10.1.3
+    #   - NIST-800-53-CM-6(a)
+    #   - PCI-DSS-Req-11.5
+    #   - PCI-DSSv4-11.5.2
+    #   - aide_build_database
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
-    - name: Build and Test AIDE Database
-      command: /usr/sbin/aideinit -y -f
-      changed_when: true
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - CJIS-5.10.1.3
-      - NIST-800-53-CM-6(a)
-      - PCI-DSS-Req-11.5
-      - PCI-DSSv4-11.5.2
-      - aide_build_database
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Build and Test AIDE Database
+    #   command: /usr/sbin/aideinit -y -f
+    #   changed_when: true
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - CJIS-5.10.1.3
+    #   - NIST-800-53-CM-6(a)
+    #   - PCI-DSS-Req-11.5
+    #   - PCI-DSSv4-11.5.2
+    #   - aide_build_database
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
-    - name: Check whether the stock AIDE Database exists
-      stat:
-        path: /var/lib/aide/aide.db.new.gz
-      register: aide_database_stat
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - CJIS-5.10.1.3
-      - NIST-800-53-CM-6(a)
-      - PCI-DSS-Req-11.5
-      - PCI-DSSv4-11.5.2
-      - aide_build_database
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Check whether the stock AIDE Database exists
+    #   stat:
+    #     path: /var/lib/aide/aide.db.new.gz
+    #   register: aide_database_stat
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - CJIS-5.10.1.3
+    #   - NIST-800-53-CM-6(a)
+    #   - PCI-DSS-Req-11.5
+    #   - PCI-DSSv4-11.5.2
+    #   - aide_build_database
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
-    - name: Stage AIDE Database
-      copy:
-        src: /var/lib/aide/aide.db.new
-        dest: /var/lib/aide/aide.db
-        backup: true
-        remote_src: true
-      when:
-      - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      - (aide_database_stat.stat.exists is defined and aide_database_stat.stat.exists)
-      tags:
-      - CJIS-5.10.1.3
-      - NIST-800-53-CM-6(a)
-      - PCI-DSS-Req-11.5
-      - PCI-DSSv4-11.5.2
-      - aide_build_database
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Stage AIDE Database
+    #   copy:
+    #     src: /var/lib/aide/aide.db.new
+    #     dest: /var/lib/aide/aide.db
+    #     backup: true
+    #     remote_src: true
+    #   when:
+    #   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   - (aide_database_stat.stat.exists is defined and aide_database_stat.stat.exists)
+    #   tags:
+    #   - CJIS-5.10.1.3
+    #   - NIST-800-53-CM-6(a)
+    #   - PCI-DSS-Req-11.5
+    #   - PCI-DSSv4-11.5.2
+    #   - aide_build_database
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
-    - name: Ensure AIDE is installed
-      package:
-        name: '{{ item }}'
-        state: present
-      with_items:
-      - aide
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - CJIS-5.10.1.3
-      - DISA-STIG-UBTU-20-010074
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-SI-7
-      - NIST-800-53-SI-7(1)
-      - PCI-DSS-Req-11.5
-      - PCI-DSSv4-11.5.2
-      - aide_periodic_cron_checking
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
+    # - name: Ensure AIDE is installed
+    #   package:
+    #     name: '{{ item }}'
+    #     state: present
+    #   with_items:
+    #   - aide
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - CJIS-5.10.1.3
+    #   - DISA-STIG-UBTU-20-010074
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-SI-7
+    #   - NIST-800-53-SI-7(1)
+    #   - PCI-DSS-Req-11.5
+    #   - PCI-DSSv4-11.5.2
+    #   - aide_periodic_cron_checking
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
     
     - name: Set cron package name - RedHat
       set_fact:
@@ -405,25 +404,26 @@
       - restrict_strategy
       - sudo_custom_logfile
     
+    
     - name: Ensure logfile is enabled with the appropriate value in /etc/sudoers
       lineinfile:
         path: /etc/sudoers
-        regexp: '^[\s]*Defaults\s.*logfile=.*'
-        line: 'Defaults logfile={{ var_sudo_logfile }}'
+        regexp: ^[\s]*Defaults\s(.*)\blogfile=[-]?.+\b(.*)$
+        line: Defaults \1logfile={{ var_sudo_logfile }}\2
         validate: /usr/sbin/visudo -cf %s
-        backrefs: false
+        backrefs: true
       register: edit_sudoers_logfile_option
       when: '"sudo" in ansible_facts.packages'
       tags:
-        - PCI-DSS-Req-10.2.5
-        - PCI-DSSv4-10.2.1.5
-        - low_complexity
-        - low_disruption
-        - low_severity
-        - no_reboot_needed
-        - restrict_strategy
-        - sudo_custom_logfile
-
+      - PCI-DSS-Req-10.2.5
+      - PCI-DSSv4-10.2.1.5
+      - low_complexity
+      - low_disruption
+      - low_severity
+      - no_reboot_needed
+      - restrict_strategy
+      - sudo_custom_logfile
+    
     - name: Enable logfile option with appropriate value in /etc/sudoers
       lineinfile:
         path: /etc/sudoers
@@ -786,9 +786,7 @@
         when:
         - result_authselect_present is defined
         - result_authselect_present.stat.exists
-        - |-
-          (result_pam_module_add is defined and result_pam_module_add.changed)
-           or (result_pam_module_edit is defined and result_pam_module_edit.changed)
+          (result_pam_module_add is defined and result_pam_module_add.changed) or (result_pam_module_edit is defined and result_pam_module_edit.changed)
       when:
       - '"libpam-runtime" in ansible_facts.packages'
       - result_pam_line_present.found is defined
@@ -931,9 +929,7 @@
         when:
         - result_authselect_present is defined
         - result_authselect_present.stat.exists
-        - |-
-          (result_pam_module_add is defined and result_pam_module_add.changed)
-           or (result_pam_module_edit is defined and result_pam_module_edit.changed)
+          (result_pam_module_add is defined and result_pam_module_add.changed) or (result_pam_module_edit is defined and result_pam_module_edit.changed)
       when:
       - '"libpam-runtime" in ansible_facts.packages'
       - result_pam_line_present.found is defined
@@ -1075,9 +1071,7 @@
         when:
         - result_authselect_present is defined
         - result_authselect_present.stat.exists
-        - |-
-          (result_pam_module_add is defined and result_pam_module_add.changed)
-           or (result_pam_module_edit is defined and result_pam_module_edit.changed)
+          (result_pam_module_add is defined and result_pam_module_add.changed) or (result_pam_module_edit is defined and result_pam_module_edit.changed)
       when:
       - '"libpam-runtime" in ansible_facts.packages'
       - result_pam_line_present.found is defined
@@ -1865,7 +1859,9 @@
       - low_disruption
       - medium_severity
       - no_reboot_needed
-      - restrict_strategy    
+      - restrict_strategy
+    
+    
     
     - name: Check if umask in /etc/bashrc is already set
       ansible.builtin.lineinfile:
@@ -1886,92 +1882,92 @@
       - no_reboot_needed
       - restrict_strategy
     
-#    - name: Replace user umask in /etc/bashrc
-#      ansible.builtin.replace:
-#        path: /etc/bashrc
-#        regexp: ^(\s*)umask(\s+).*
-#        replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
-#      when: umask_replace.found > 0
-#      tags:
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - PCI-DSSv4-8.6.1
-#      - accounts_umask_etc_bashrc
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#    
-#    - name: Ensure the Default umask is Appended Correctly
-#      ansible.builtin.lineinfile:
-#        create: true
-#        path: /etc/bashrc
-#        line: umask {{ var_accounts_user_umask }}
-#      when: umask_replace.found == 0
-#      tags:
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - PCI-DSSv4-8.6.1
-#      - accounts_umask_etc_bashrc
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#    
-#    
-#    
-#    - name: Check if umask in /etc/csh.cshrc is already set
-#      ansible.builtin.lineinfile:
-#        path: /etc/csh.cshrc
-#        regexp: ^(\s*)umask\s+.*
-#        state: absent
-#      check_mode: true
-#      changed_when: false
-#      register: umask_replace
-#      tags:
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - accounts_umask_etc_csh_cshrc
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#    
-#    - name: Replace user umask in /etc/csh.cshrc
-#      ansible.builtin.replace:
-#        path: /etc/csh.cshrc
-#        regexp: ^(\s*)umask(\s+).*
-#        replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
-#      when: umask_replace.found > 0
-#      tags:
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - accounts_umask_etc_csh_cshrc
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#    
-#    - name: Ensure the Default umask is Appended Correctly
-#      ansible.builtin.lineinfile:
-#        create: true
-#        path: /etc/csh.cshrc
-#        line: umask {{ var_accounts_user_umask }}
-#      when: umask_replace.found == 0
-#      tags:
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - accounts_umask_etc_csh_cshrc
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-
+    - name: Replace user umask in /etc/bashrc
+      ansible.builtin.replace:
+        path: /etc/bashrc
+        regexp: ^(\s*)umask(\s+).*
+        replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
+      when: umask_replace.found > 0
+      tags:
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - PCI-DSSv4-8.6.1
+      - accounts_umask_etc_bashrc
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+    
+    - name: Ensure the Default umask is Appended Correctly
+      ansible.builtin.lineinfile:
+        create: true
+        path: /etc/bashrc
+        line: umask {{ var_accounts_user_umask }}
+      when: umask_replace.found == 0
+      tags:
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - PCI-DSSv4-8.6.1
+      - accounts_umask_etc_bashrc
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+    
+    
+    
+    - name: Check if umask in /etc/csh.cshrc is already set
+      ansible.builtin.lineinfile:
+        path: /etc/csh.cshrc
+        regexp: ^(\s*)umask\s+.*
+        state: absent
+      check_mode: true
+      changed_when: false
+      register: umask_replace
+      tags:
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - accounts_umask_etc_csh_cshrc
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+    
+    - name: Replace user umask in /etc/csh.cshrc
+      ansible.builtin.replace:
+        path: /etc/csh.cshrc
+        regexp: ^(\s*)umask(\s+).*
+        replace: \g<1>umask\g<2>{{ var_accounts_user_umask }}
+      when: umask_replace.found > 0
+      tags:
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - accounts_umask_etc_csh_cshrc
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+    
+    - name: Ensure the Default umask is Appended Correctly
+      ansible.builtin.lineinfile:
+        create: true
+        path: /etc/csh.cshrc
+        line: umask {{ var_accounts_user_umask }}
+      when: umask_replace.found == 0
+      tags:
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - accounts_umask_etc_csh_cshrc
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+    
     - name: Gather the package facts
       package_facts:
         manager: auto
@@ -1988,66 +1984,66 @@
       - restrict_strategy
     
     
-#    - name: Check if UMASK is already set
-#      ansible.builtin.lineinfile:
-#        path: /etc/login.defs
-#        regexp: ^(\s*)UMASK\s+.*
-#        state: absent
-#      check_mode: true
-#      changed_when: false
-#      register: result_umask_is_set
-#      when: '"login" in ansible_facts.packages'
-#      tags:
-#      - DISA-STIG-UBTU-20-010016
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - PCI-DSSv4-8.6.1
-#      - accounts_umask_etc_login_defs
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#    
-#    - name: Replace user UMASK in /etc/login.defs
-#      ansible.builtin.replace:
-#        path: /etc/login.defs
-#        regexp: ^(\s*)UMASK(\s+).*
-#        replace: \g<1>UMASK\g<2>{{ var_accounts_user_umask }}
-#      when:
-#      - '"login" in ansible_facts.packages'
-#      - result_umask_is_set.found > 0
-#      tags:
-#      - DISA-STIG-UBTU-20-010016
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - PCI-DSSv4-8.6.1
-#      - accounts_umask_etc_login_defs
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#    
-#    - name: Ensure the Default UMASK is Appended Correctly
-#      ansible.builtin.lineinfile:
-#        create: true
-#        path: /etc/login.defs
-#        line: UMASK {{ var_accounts_user_umask }}
-#      when:
-#      - '"login" in ansible_facts.packages'
-#      - result_umask_is_set.found == 0
-#      tags:
-#      - DISA-STIG-UBTU-20-010016
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - PCI-DSSv4-8.6.1
-#      - accounts_umask_etc_login_defs
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
+    - name: Check if UMASK is already set
+      ansible.builtin.lineinfile:
+        path: /etc/login.defs
+        regexp: ^(\s*)UMASK\s+.*
+        state: absent
+      check_mode: true
+      changed_when: false
+      register: result_umask_is_set
+      when: '"login" in ansible_facts.packages'
+      tags:
+      - DISA-STIG-UBTU-20-010016
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - PCI-DSSv4-8.6.1
+      - accounts_umask_etc_login_defs
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+    
+    - name: Replace user UMASK in /etc/login.defs
+      ansible.builtin.replace:
+        path: /etc/login.defs
+        regexp: ^(\s*)UMASK(\s+).*
+        replace: \g<1>UMASK\g<2>{{ var_accounts_user_umask }}
+      when:
+      - '"login" in ansible_facts.packages'
+      - result_umask_is_set.found > 0
+      tags:
+      - DISA-STIG-UBTU-20-010016
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - PCI-DSSv4-8.6.1
+      - accounts_umask_etc_login_defs
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+    
+    - name: Ensure the Default UMASK is Appended Correctly
+      ansible.builtin.lineinfile:
+        create: true
+        path: /etc/login.defs
+        line: UMASK {{ var_accounts_user_umask }}
+      when:
+      - '"login" in ansible_facts.packages'
+      - result_umask_is_set.found == 0
+      tags:
+      - DISA-STIG-UBTU-20-010016
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - PCI-DSSv4-8.6.1
+      - accounts_umask_etc_login_defs
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
     
     
     
@@ -2590,18 +2586,18 @@
       - no_reboot_needed
       - package_iptables-persistent_removed
     
-#    - name: Ensure iptables-persistent is removed
-#      package:
-#        name: iptables-persistent
-#        state: absent
-#      when: '"iptables" in ansible_facts.packages'
-#      tags:
-#      - disable_strategy
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - package_iptables-persistent_removed
+    - name: Ensure iptables-persistent is removed
+      package:
+        name: iptables-persistent
+        state: absent
+      when: '"iptables" in ansible_facts.packages'
+      tags:
+      - disable_strategy
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - package_iptables-persistent_removed
     
     - name: Gather the package facts
       package_facts:
@@ -2612,65 +2608,65 @@
       - medium_severity
       - set_ipv6_loopback_traffic
     
-#    - name: Check if IPv6 is enabled
-#      command: sysctl -n net.ipv6.conf.all.disable_ipv6
-#      register: ipv6_status
-#      failed_when: ipv6_status.stdout != "0"
-#      when: ( not ( "nftables" in ansible_facts.packages ) and not ( "ufw" in ansible_facts.packages
-#        ) and "iptables" in ansible_facts.packages )
-#      tags:
-#      - PCI-DSS-Req-1.3
-#      - PCI-DSSv4-1.4.1
-#      - medium_severity
-#      - set_ipv6_loopback_traffic
+    - name: Check if IPv6 is enabled
+      command: sysctl -n net.ipv6.conf.all.disable_ipv6
+      register: ipv6_status
+      failed_when: ipv6_status.stdout != "0"
+      when: ( not ( "nftables" in ansible_facts.packages ) and not ( "ufw" in ansible_facts.packages
+        ) and "iptables" in ansible_facts.packages )
+      tags:
+      - PCI-DSS-Req-1.3
+      - PCI-DSSv4-1.4.1
+      - medium_severity
+      - set_ipv6_loopback_traffic
     
-#    - name: Allow incoming traffic on the loopback interface
-#      ansible.builtin.iptables:
-#        ip_version: ipv6
-#        chain: INPUT
-#        in_interface: lo
-#        jump: ACCEPT
-#      when:
-#      - ( not ( "nftables" in ansible_facts.packages ) and not ( "ufw" in ansible_facts.packages
-#        ) and "iptables" in ansible_facts.packages )
-#      - ipv6_status.stdout == '0'
-#      tags:
-#      - PCI-DSS-Req-1.3
-#      - PCI-DSSv4-1.4.1
-#      - medium_severity
-#      - set_ipv6_loopback_traffic
-#    
-#    - name: Allow outgoing traffic on the loopback interface
-#      ansible.builtin.iptables:
-#        ip_version: ipv6
-#        chain: OUTPUT
-#        out_interface: lo
-#        jump: ACCEPT
-#      when:
-#      - ( not ( "nftables" in ansible_facts.packages ) and not ( "ufw" in ansible_facts.packages
-#        ) and "iptables" in ansible_facts.packages )
-#      - ipv6_status.stdout == '0'
-#      tags:
-#      - PCI-DSS-Req-1.3
-#      - PCI-DSSv4-1.4.1
-#      - medium_severity
-#      - set_ipv6_loopback_traffic
-#    
-#    - name: Drop incoming traffic from the localhost
-#      ansible.builtin.iptables:
-#        ip_version: ipv6
-#        chain: INPUT
-#        source: ::1
-#        jump: DROP
-#      when:
-#      - ( not ( "nftables" in ansible_facts.packages ) and not ( "ufw" in ansible_facts.packages
-#        ) and "iptables" in ansible_facts.packages )
-#      - ipv6_status.stdout == '0'
-#      tags:
-#      - PCI-DSS-Req-1.3
-#      - PCI-DSSv4-1.4.1
-#      - medium_severity
-#      - set_ipv6_loopback_traffic
+    - name: Allow incoming traffic on the loopback interface
+      ansible.builtin.iptables:
+        ipv6: true
+        chain: INPUT
+        in_interface: lo
+        jump: ACCEPT
+      when:
+      - ( not ( "nftables" in ansible_facts.packages ) and not ( "ufw" in ansible_facts.packages
+        ) and "iptables" in ansible_facts.packages )
+      - ipv6_status.stdout == '0'
+      tags:
+      - PCI-DSS-Req-1.3
+      - PCI-DSSv4-1.4.1
+      - medium_severity
+      - set_ipv6_loopback_traffic
+    
+    - name: Allow outgoing traffic on the loopback interface
+      ansible.builtin.iptables:
+        ipv6: true
+        chain: OUTPUT
+        out_interface: lo
+        jump: ACCEPT
+      when:
+      - ( not ( "nftables" in ansible_facts.packages ) and not ( "ufw" in ansible_facts.packages
+        ) and "iptables" in ansible_facts.packages )
+      - ipv6_status.stdout == '0'
+      tags:
+      - PCI-DSS-Req-1.3
+      - PCI-DSSv4-1.4.1
+      - medium_severity
+      - set_ipv6_loopback_traffic
+    
+    - name: Drop incoming traffic from the localhost
+      ansible.builtin.iptables:
+        ipv6: true
+        chain: INPUT
+        source: ::1
+        jump: DROP
+      when:
+      - ( not ( "nftables" in ansible_facts.packages ) and not ( "ufw" in ansible_facts.packages
+        ) and "iptables" in ansible_facts.packages )
+      - ipv6_status.stdout == '0'
+      tags:
+      - PCI-DSS-Req-1.3
+      - PCI-DSSv4-1.4.1
+      - medium_severity
+      - set_ipv6_loopback_traffic
     
     - name: Gather the package facts
       package_facts:
@@ -2764,25 +2760,25 @@
       - sysctl_net_ipv6_conf_all_accept_ra
     
     
-#    - name: Ensure sysctl net.ipv6.conf.all.accept_ra is set
-#      sysctl:
-#        name: net.ipv6.conf.all.accept_ra
-#        value: '{{ sysctl_net_ipv6_conf_all_accept_ra_value }}'
-#        sysctl_file: /etc/sysctl.conf
-#        state: present
-#        reload: true
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-171-3.1.20
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - disable_strategy
-#      - low_complexity
-#      - medium_disruption
-#      - medium_severity
-#      - reboot_required
-#      - sysctl_net_ipv6_conf_all_accept_ra
+    - name: Ensure sysctl net.ipv6.conf.all.accept_ra is set
+      sysctl:
+        name: net.ipv6.conf.all.accept_ra
+        value: '{{ sysctl_net_ipv6_conf_all_accept_ra_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv6_conf_all_accept_ra
     
     - name: List /etc/sysctl.d/*.conf files
       find:
@@ -2833,27 +2829,27 @@
       - sysctl_net_ipv6_conf_all_accept_redirects
     
     
-#    - name: Ensure sysctl net.ipv6.conf.all.accept_redirects is set
-#      sysctl:
-#        name: net.ipv6.conf.all.accept_redirects
-#        value: '{{ sysctl_net_ipv6_conf_all_accept_redirects_value }}'
-#        sysctl_file: /etc/sysctl.conf
-#        state: present
-#        reload: true
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-171-3.1.20
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-6(b)
-#      - NIST-800-53-CM-6.1(iv)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - disable_strategy
-#      - low_complexity
-#      - medium_disruption
-#      - medium_severity
-#      - reboot_required
-#      - sysctl_net_ipv6_conf_all_accept_redirects
+    - name: Ensure sysctl net.ipv6.conf.all.accept_redirects is set
+      sysctl:
+        name: net.ipv6.conf.all.accept_redirects
+        value: '{{ sysctl_net_ipv6_conf_all_accept_redirects_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-6(b)
+      - NIST-800-53-CM-6.1(iv)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv6_conf_all_accept_redirects
     
     - name: List /etc/sysctl.d/*.conf files
       find:
@@ -2900,25 +2896,25 @@
       - sysctl_net_ipv6_conf_all_accept_source_route
     
     
-#    - name: Ensure sysctl net.ipv6.conf.all.accept_source_route is set
-#      sysctl:
-#        name: net.ipv6.conf.all.accept_source_route
-#        value: '{{ sysctl_net_ipv6_conf_all_accept_source_route_value }}'
-#        sysctl_file: /etc/sysctl.conf
-#        state: present
-#        reload: true
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-171-3.1.20
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - disable_strategy
-#      - low_complexity
-#      - medium_disruption
-#      - medium_severity
-#      - reboot_required
-#      - sysctl_net_ipv6_conf_all_accept_source_route
+    - name: Ensure sysctl net.ipv6.conf.all.accept_source_route is set
+      sysctl:
+        name: net.ipv6.conf.all.accept_source_route
+        value: '{{ sysctl_net_ipv6_conf_all_accept_source_route_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv6_conf_all_accept_source_route
     
     - name: List /etc/sysctl.d/*.conf files
       find:
@@ -2966,26 +2962,26 @@
       - sysctl_net_ipv6_conf_all_forwarding
     
     
-#    - name: Ensure sysctl net.ipv6.conf.all.forwarding is set
-#      sysctl:
-#        name: net.ipv6.conf.all.forwarding
-#        value: '{{ sysctl_net_ipv6_conf_all_forwarding_value }}'
-#        sysctl_file: /etc/sysctl.conf
-#        state: present
-#        reload: true
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-6(b)
-#      - NIST-800-53-CM-6.1(iv)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - disable_strategy
-#      - low_complexity
-#      - medium_disruption
-#      - medium_severity
-#      - reboot_required
-#      - sysctl_net_ipv6_conf_all_forwarding
+    - name: Ensure sysctl net.ipv6.conf.all.forwarding is set
+      sysctl:
+        name: net.ipv6.conf.all.forwarding
+        value: '{{ sysctl_net_ipv6_conf_all_forwarding_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-6(b)
+      - NIST-800-53-CM-6.1(iv)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv6_conf_all_forwarding
     
     - name: List /etc/sysctl.d/*.conf files
       find:
@@ -3032,25 +3028,25 @@
       - sysctl_net_ipv6_conf_default_accept_ra
     
     
-#    - name: Ensure sysctl net.ipv6.conf.default.accept_ra is set
-#      sysctl:
-#        name: net.ipv6.conf.default.accept_ra
-#        value: '{{ sysctl_net_ipv6_conf_default_accept_ra_value }}'
-#        sysctl_file: /etc/sysctl.conf
-#        state: present
-#        reload: true
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-171-3.1.20
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - disable_strategy
-#      - low_complexity
-#      - medium_disruption
-#      - medium_severity
-#      - reboot_required
-#      - sysctl_net_ipv6_conf_default_accept_ra
+    - name: Ensure sysctl net.ipv6.conf.default.accept_ra is set
+      sysctl:
+        name: net.ipv6.conf.default.accept_ra
+        value: '{{ sysctl_net_ipv6_conf_default_accept_ra_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv6_conf_default_accept_ra
     
     - name: List /etc/sysctl.d/*.conf files
       find:
@@ -3097,25 +3093,25 @@
       - sysctl_net_ipv6_conf_default_accept_redirects
     
     
-#    - name: Ensure sysctl net.ipv6.conf.default.accept_redirects is set
-#      sysctl:
-#        name: net.ipv6.conf.default.accept_redirects
-#        value: '{{ sysctl_net_ipv6_conf_default_accept_redirects_value }}'
-#        sysctl_file: /etc/sysctl.conf
-#        state: present
-#        reload: true
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-171-3.1.20
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - disable_strategy
-#      - low_complexity
-#      - medium_disruption
-#      - medium_severity
-#      - reboot_required
-#      - sysctl_net_ipv6_conf_default_accept_redirects
+    - name: Ensure sysctl net.ipv6.conf.default.accept_redirects is set
+      sysctl:
+        name: net.ipv6.conf.default.accept_redirects
+        value: '{{ sysctl_net_ipv6_conf_default_accept_redirects_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv6_conf_default_accept_redirects
     
     - name: List /etc/sysctl.d/*.conf files
       find:
@@ -3168,28 +3164,28 @@
       - sysctl_net_ipv6_conf_default_accept_source_route
     
     
-#    - name: Ensure sysctl net.ipv6.conf.default.accept_source_route is set
-#      sysctl:
-#        name: net.ipv6.conf.default.accept_source_route
-#        value: '{{ sysctl_net_ipv6_conf_default_accept_source_route_value }}'
-#        sysctl_file: /etc/sysctl.conf
-#        state: present
-#        reload: true
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-171-3.1.20
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-6(b)
-#      - NIST-800-53-CM-6.1(iv)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - PCI-DSS-Req-1.4.3
-#      - disable_strategy
-#      - low_complexity
-#      - medium_disruption
-#      - medium_severity
-#      - reboot_required
-#      - sysctl_net_ipv6_conf_default_accept_source_route
+    - name: Ensure sysctl net.ipv6.conf.default.accept_source_route is set
+      sysctl:
+        name: net.ipv6.conf.default.accept_source_route
+        value: '{{ sysctl_net_ipv6_conf_default_accept_source_route_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-6(b)
+      - NIST-800-53-CM-6.1(iv)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - PCI-DSS-Req-1.4.3
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv6_conf_default_accept_source_route
     
     - name: List /etc/sysctl.d/*.conf files
       find:
@@ -4461,6 +4457,7 @@
         var_nftables_base_chain_names: !!str input,forward,output
       tags:
         - always
+    - name: XCCDF Value var_nftables_base_
     - name: XCCDF Value var_nftables_base_chain_names # promote to variable
       set_fact:
         var_nftables_base_chain_names: !!str input,forward,output
@@ -4509,12 +4506,12 @@
         - always
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
-      ansible.builtin.shell: nft list tables | grep \'{{ var_nftables_family }} {{ var_nftables_table }}\'
+      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table
+        }}'
       register: existing_nftables
       changed_when: false
       failed_when: false
-      when: '"nftables" in ansible_facts.packages'
-
+      when: '"nftables" in ansible_facts.p
     - name: XCCDF Value var_nftables_base_chain_priorities # promote to variable
       set_fact:
         var_nftables_base_chain_priorities: !!str 0,0,0
@@ -4543,8 +4540,7 @@
     - name: Ensure Base Chains Exist for Nftables - Set NFTables Table
       ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table }}
       when:
-      - '"nftables" in ansible_facts.packages'
-
+      - '"nftable
     - name: XCCDF Value var_nftables_base_chain_policies # promote to variable
       set_fact:
         var_nftables_base_chain_policies: !!str accept,accept,accept
@@ -4577,9 +4573,6 @@
       - no_reboot_needed
       - restrict_strategy
       - set_nftables_base_chain
-    
-        #    - name: Ensure Base Chains Exist for Nftables - Add Base Chains
-      #      ansible.builtin.command: nft 'add chain {{ var_nftables_famil
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
       ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
@@ -4609,7 +4602,8 @@
       - set_nftables_base_chain
     
     - name: Ensure Base Chains Exist for Nftables - Add Base Chains
-      ansible.builtin.command: nft 'add chain {{ var_nftables_family }} {{ var_nftables_table }} {{ item.0 }} { type {{ item.1 }} hook {{ item.2 }} priority {{ item.3 }} ; policy {{ item.4 }} ; }'
+      ansible.builtin.command: nft 'add chain {{ var_nftables_family }} {{ var_nftables_table }} {{ item.0 }} { type {{ item.1 }} hook {{ item.2 }} priority {{ item.3 }} ;
+        policy {{ item.4 }} ; }'
       with_together:
       - '{{ var_nftables_base_chain_names.split(",") }}'
       - '{{ var_nftables_base_chain_types.split(",") }}'
@@ -4642,7 +4636,8 @@
       - set_nftables_loopback_traffic
     
     - name: Create Rule to Drop Input IP Address from Loopback
-      ansible.builtin.command: nft insert rule inet filter input ip saddr 127.0.0.0/8 counter drop
+      ansible.builtin.command: nft insert rule inet filter input ip saddr 127.0.0.0/8
+        counter drop
       when: '"nftables" in ansible_facts.packages'
       tags:
       - PCI-DSS-Req-1.4.1
@@ -4689,8 +4684,7 @@
       ansible.builtin.command: nft add rule inet filter input ip6 saddr ::1 counter drop
       when:
       - '"nftables" in ansible_facts.packages'
-      - ipv6_status.rc == 0 or sysctl_ipv6_all.found > 0 or sysctl_ipv6_default.found
-        > 0
+      - ipv6_status.rc == 0 or sysctl_ipv6_all.found > 0 or sysctl_ipv6_default.found > 0
       tags:
       - PCI-DSS-Req-1.4.1
       - medium_severity
@@ -4761,18 +4755,18 @@
       - no_reboot_needed
       - package_ufw_installed
     
-#    - name: Ensure ufw is removed
-#      package:
-#        name: ufw
-#        state: absent
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - disable_strategy
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - package_ufw_removed
+    - name: Ensure ufw is removed
+      package:
+        name: ufw
+        state: absent
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - disable_strategy
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - package_ufw_removed
     
     - name: Gather the package facts
       package_facts:
@@ -4835,50 +4829,50 @@
       - unknown_strategy
       - wireless_disable_interfaces
     
-#    - name: Ensure NetworkManager is installed
-#      ansible.builtin.package:
-#        name: '{{ item }}'
-#        state: present
-#      with_items:
-#      - NetworkManager
-#      tags:
-#      - DISA-STIG-UBTU-20-010455
-#      - NIST-800-171-3.1.16
-#      - NIST-800-53-AC-18(3)
-#      - NIST-800-53-AC-18(a)
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - NIST-800-53-MP-7
-#      - PCI-DSS-Req-1.3.3
-#      - PCI-DSSv4-1.4.3
-#      - low_complexity
-#      - medium_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - unknown_strategy
-#      - wireless_disable_interfaces
-#    
-#    - name: Deactivate Wireless Network Interfaces
-#      command: nmcli radio wifi off
-#      when: '''NetworkManager'' in ansible_facts.packages'
-#      tags:
-#      - DISA-STIG-UBTU-20-010455
-#      - NIST-800-171-3.1.16
-#      - NIST-800-53-AC-18(3)
-#      - NIST-800-53-AC-18(a)
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - NIST-800-53-MP-7
-#      - PCI-DSS-Req-1.3.3
-#      - PCI-DSSv4-1.4.3
-#      - low_complexity
-#      - medium_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - unknown_strategy
-#      - wireless_disable_interfaces
+    - name: Ensure NetworkManager is installed
+      ansible.builtin.package:
+        name: '{{ item }}'
+        state: present
+      with_items:
+      - NetworkManager
+      tags:
+      - DISA-STIG-UBTU-20-010455
+      - NIST-800-171-3.1.16
+      - NIST-800-53-AC-18(3)
+      - NIST-800-53-AC-18(a)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-MP-7
+      - PCI-DSS-Req-1.3.3
+      - PCI-DSSv4-1.4.3
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - no_reboot_needed
+      - unknown_strategy
+      - wireless_disable_interfaces
+    
+    - name: Deactivate Wireless Network Interfaces
+      command: nmcli radio wifi off
+      when: '''NetworkManager'' in ansible_facts.packages'
+      tags:
+      - DISA-STIG-UBTU-20-010455
+      - NIST-800-171-3.1.16
+      - NIST-800-53-AC-18(3)
+      - NIST-800-53-AC-18(a)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-MP-7
+      - PCI-DSS-Req-1.3.3
+      - PCI-DSSv4-1.4.3
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - no_reboot_needed
+      - unknown_strategy
+      - wireless_disable_interfaces
     
     - name: Find /var/log/ file(s)
       command: find -H /var/log/ -maxdepth 1 -perm /u+xs,g+xws,o+xwrt  -type f -regex
@@ -5686,36 +5680,36 @@
       - medium_severity
       - no_reboot_needed
     
-#    - name: Block Disable service autofs
-#      block:
-#    
-#      - name: Disable service autofs
-#        block:
-#    
-#        - name: Disable service autofs
-#          systemd:
-#            name: autofs.service
-#            enabled: 'no'
-#            state: stopped
-#            masked: 'yes'
-#        rescue:
-#    
-#        - name: Intentionally ignored previous 'Disable service autofs' failure, service
-#            was already disabled
-#          meta: noop
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-171-3.4.6
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - NIST-800-53-MP-7
-#      - disable_strategy
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - service_autofs_disabled
+    - name: Block Disable service autofs
+      block:
+    
+      - name: Disable service autofs
+        block:
+    
+        - name: Disable service autofs
+          systemd:
+            name: autofs.service
+            enabled: 'no'
+            state: stopped
+            masked: 'yes'
+        rescue:
+    
+        - name: Intentionally ignored previous 'Disable service autofs' failure, service
+            was already disabled
+          meta: noop
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-171-3.4.6
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-MP-7
+      - disable_strategy
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - service_autofs_disabled
     
     - name: Unit Socket Exists - autofs.socket
       command: systemctl -q list-unit-files autofs.socket
@@ -5970,7 +5964,8 @@
     - name: 'Add nodev Option to /dev/shm: Make sure nodev option is part of the to /dev/shm
         options'
       set_fact:
-        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nodev''}) }}'
+        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nodev''
+          }) }}'
       when:
       - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
       - mount_info is defined and "nodev" not in mount_info.options
@@ -6714,8 +6709,7 @@
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and "/tmp" in ansible_mounts | map(attribute="mount") | list )
-      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab"
-        | length == 0)
+      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
       tags:
       - NIST-800-53-AC-6
       - NIST-800-53-AC-6(1)
@@ -6876,7 +6870,8 @@
         - ''
         - defaults
       when:
-      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
+      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
       - ("--fstab" | length == 0)
       - (device_name.stdout | length == 0)
       tags:
@@ -6890,9 +6885,10 @@
     - name: 'Add noexec Option to /var/tmp: Make sure noexec option is part of the to
         /var/tmp options'
       set_fact:
-        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',noexec'' }) }}'
+        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',noexec''}) }}'
       when:
-      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
+      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
       - mount_info is defined and "noexec" not in mount_info.options
       tags:
       - configure_strategy
@@ -6910,8 +6906,10 @@
         state: mounted
         fstype: '{{ mount_info.fstype }}'
       when:
-      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
-      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
+      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
+      - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab"
+        | length == 0)
       tags:
       - configure_strategy
       - high_disruption
@@ -6925,7 +6923,9 @@
       register: device_name
       failed_when: device_name.rc > 1
       changed_when: false
-      when: ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
+      when: ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman",
+        "container"] and "/var/tmp" in ansible_mounts | map(attribute="mount") | list
+        )
       tags:
       - configure_strategy
       - high_disruption
@@ -6941,7 +6941,8 @@
       - '{{ device_name.stdout_lines[0].split() | list | lower }}'
       - '{{ device_name.stdout_lines[1].split() | list }}'
       when:
-      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
+      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
       - device_name.stdout is defined and device_name.stdout_lines is defined
       - (device_name.stdout | length > 0)
       tags:
@@ -6952,7 +6953,8 @@
       - mount_option_var_tmp_nosuid
       - no_reboot_needed
     
-    - name: 'Add nosuid Option to /var/tmp: If /var/tmp not mounted, craft mount_info manually'
+    - name: 'Add nosuid Option to /var/tmp: If /var/tmp not mounted, craft mount_info
+        manually'
       set_fact:
         mount_info: '{{ mount_info|default({})|combine({item.0: item.1}) }}'
       with_together:
@@ -6965,7 +6967,8 @@
         - ''
         - defaults
       when:
-      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
+      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
       - ("--fstab" | length == 0)
       - (device_name.stdout | length == 0)
       tags:
@@ -6976,11 +6979,14 @@
       - mount_option_var_tmp_nosuid
       - no_reboot_needed
     
-    - name: 'Add nosuid Option to /var/tmp: Make sure nosuid option is part of the to /var/tmp options'
+    - name: 'Add nosuid Option to /var/tmp: Make sure nosuid option is part of the to
+        /var/tmp options'
       set_fact:
-        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nosuid'' }) }}'
+        mount_info: '{{ mount_info | combine( {''options'':''''~mount_info.options~'',nosuid''
+          }) }}'
       when:
-      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
+      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
       - mount_info is defined and "nosuid" not in mount_info.options
       tags:
       - configure_strategy
@@ -6998,7 +7004,8 @@
         state: mounted
         fstype: '{{ mount_info.fstype }}'
       when:
-      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
+      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        and "/var/tmp" in ansible_mounts | map(attribute="mount") | list )
       - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
       tags:
       - configure_strategy
@@ -8394,801 +8401,801 @@
       - package_net-snmp_removed
       - unknown_severity
     
-#    - name: Test for existence /etc/ssh/sshd_config
-#      stat:
-#        path: /etc/ssh/sshd_config
-#      register: file_exists
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - configure_strategy
-#      - file_groupowner_sshd_config
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#    
-#    - name: Ensure group owner 0 on /etc/ssh/sshd_config
-#      file:
-#        path: /etc/ssh/sshd_config
-#        group: '0'
-#      when:
-#      - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      - file_exists.stat is defined and file_exists.stat.exists
-#      tags:
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - configure_strategy
-#      - file_groupowner_sshd_config
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#    
-#    - name: Test for existence /etc/ssh/sshd_config
-#      stat:
-#        path: /etc/ssh/sshd_config
-#      register: file_exists
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - configure_strategy
-#      - file_owner_sshd_config
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#    
-#    - name: Ensure owner 0 on /etc/ssh/sshd_config
-#      file:
-#        path: /etc/ssh/sshd_config
-#        owner: '0'
-#      when:
-#      - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      - file_exists.stat is defined and file_exists.stat.exists
-#      tags:
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - configure_strategy
-#      - file_owner_sshd_config
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#    
-#    - name: Test for existence /etc/ssh/sshd_config
-#      stat:
-#        path: /etc/ssh/sshd_config
-#      register: file_exists
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - PCI-DSSv4-2.2.6
-#      - configure_strategy
-#      - file_permissions_sshd_config
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#    
-#    - name: Ensure permission u-xs,g-xwrs,o-xwrt on /etc/ssh/sshd_config
-#      file:
-#        path: /etc/ssh/sshd_config
-#        mode: u-xs,g-xwrs,o-xwrt
-#      when:
-#      - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      - file_exists.stat is defined and file_exists.stat.exists
-#      tags:
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - PCI-DSSv4-2.2.6
-#      - configure_strategy
-#      - file_permissions_sshd_config
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#    
-#    - name: Find root:root-owned keys
-#      ansible.builtin.command: find -H /etc/ssh/ -maxdepth 1 -user root -regex ".*_key$"
-#        -type f -group root -perm /u+xs,g+xwrs,o+xwrt
-#      register: root_owned_keys
-#      changed_when: false
-#      failed_when: false
-#      check_mode: false
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-171-3.1.13
-#      - NIST-800-171-3.13.10
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - PCI-DSS-Req-2.2.4
-#      - PCI-DSSv4-2.2.6
-#      - configure_strategy
-#      - file_permissions_sshd_private_key
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#    
-#    - name: Set permissions for root:root-owned keys
-#      ansible.builtin.file:
-#        path: '{{ item }}'
-#        mode: u-xs,g-xwrs,o-xwrt
-#        state: file
-#      with_items:
-#      - '{{ root_owned_keys.stdout_lines }}'
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-171-3.1.13
-#      - NIST-800-171-3.13.10
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - PCI-DSS-Req-2.2.4
-#      - PCI-DSSv4-2.2.6
-#      - configure_strategy
-#      - file_permissions_sshd_private_key
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#    
-#    - name: Find /etc/ssh/ file(s)
-#      command: find -H /etc/ssh/ -maxdepth 1 -perm /u+xs,g+xws,o+xwt  -type f -regex "^.*\.pub$"
-#      register: files_found
-#      changed_when: false
-#      failed_when: false
-#      check_mode: false
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-171-3.1.13
-#      - NIST-800-171-3.13.10
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - PCI-DSS-Req-2.2.4
-#      - PCI-DSSv4-2.2.6
-#      - configure_strategy
-#      - file_permissions_sshd_pub_key
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#    
-#    - name: Set permissions for /etc/ssh/ file(s)
-#      file:
-#        path: '{{ item }}'
-#        mode: u-xs,g-xws,o-xwt
-#        state: file
-#      with_items:
-#      - '{{ files_found.stdout_lines }}'
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-171-3.1.13
-#      - NIST-800-171-3.13.10
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-6(1)
-#      - NIST-800-53-CM-6(a)
-#      - PCI-DSS-Req-2.2.4
-#      - PCI-DSSv4-2.2.6
-#      - configure_strategy
-#      - file_permissions_sshd_pub_key
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#    
-#    
-#    
-#    - name: Set SSH Client Alive Count Max
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*ClientAliveCountMax\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*ClientAliveCountMax\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*ClientAliveCountMax\s+
-#          line: ClientAliveCountMax {{ var_sshd_set_keepalive }}
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - CJIS-5.5.6
-#      - DISA-STIG-UBTU-20-010036
-#      - NIST-800-171-3.1.11
-#      - NIST-800-53-AC-12
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-2(5)
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-SC-10
-#      - PCI-DSS-Req-8.1.8
-#      - PCI-DSSv4-8.2.8
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#      - sshd_set_keepalive
-#    
-#    - name: Disable Host-Based Authentication
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*HostbasedAuthentication\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*HostbasedAuthentication\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*HostbasedAuthentication\s+
-#          line: HostbasedAuthentication no
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - CJIS-5.5.6
-#      - NIST-800-171-3.1.12
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-3
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - PCI-DSSv4-8.3.1
-#      - disable_host_auth
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#    
-#    - name: Disable SSH Access via Empty Passwords
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*PermitEmptyPasswords\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*PermitEmptyPasswords\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*PermitEmptyPasswords\s+
-#          line: PermitEmptyPasswords no
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - CJIS-5.5.6
-#      - DISA-STIG-UBTU-20-010047
-#      - NIST-800-171-3.1.1
-#      - NIST-800-171-3.1.5
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - PCI-DSS-Req-2.2.4
-#      - PCI-DSSv4-2.2.6
-#      - high_severity
-#      - low_complexity
-#      - low_disruption
-#      - no_reboot_needed
-#      - restrict_strategy
-#      - sshd_disable_empty_passwords
-#    
-#    - name: Disable SSH Support for .rhosts Files
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*IgnoreRhosts\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*IgnoreRhosts\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*IgnoreRhosts\s+
-#          line: IgnoreRhosts yes
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - CJIS-5.5.6
-#      - NIST-800-171-3.1.12
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - PCI-DSSv4-2.2.6
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#      - sshd_disable_rhosts
-#    
-#    - name: Disable SSH Root Login
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*PermitRootLogin\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*PermitRootLogin\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*PermitRootLogin\s+
-#          line: PermitRootLogin no
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - CJIS-5.5.6
-#      - NIST-800-171-3.1.1
-#      - NIST-800-171-3.1.5
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-6(2)
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - NIST-800-53-IA-2
-#      - NIST-800-53-IA-2(5)
-#      - PCI-DSS-Req-2.2.4
-#      - PCI-DSSv4-2.2.6
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#      - sshd_disable_root_login
-#    
-#    - name: Do Not Allow SSH Environment Options
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*PermitUserEnvironment\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*PermitUserEnvironment\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*PermitUserEnvironment\s+
-#          line: PermitUserEnvironment no
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - CJIS-5.5.6
-#      - DISA-STIG-UBTU-20-010047
-#      - NIST-800-171-3.1.12
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - PCI-DSS-Req-2.2.4
-#      - PCI-DSSv4-2.2.6
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#      - sshd_do_not_permit_user_env
-#    
-#    - name: Enable PAM
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*UsePAM\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*UsePAM\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*UsePAM\s+
-#          line: UsePAM yes
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - DISA-STIG-UBTU-20-010035
-#      - PCI-DSSv4-2.2.4
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#      - sshd_enable_pam
-#    
-#    - name: Enable SSH Warning Banner
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*Banner\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*Banner\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*Banner\s+
-#          line: Banner /etc/issue.net
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - CJIS-5.5.6
-#      - DISA-STIG-UBTU-20-010038
-#      - NIST-800-171-3.1.9
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-AC-8(a)
-#      - NIST-800-53-AC-8(c)
-#      - NIST-800-53-CM-6(a)
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#      - sshd_enable_warning_banner_net
-#    
-#    
-#    
-#    - name: Ensure SSH LoginGraceTime is configured
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*LoginGraceTime\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*LoginGraceTime\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*LoginGraceTime\s+
-#          line: LoginGraceTime {{ var_sshd_set_login_grace_time }}
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#      - sshd_set_login_grace_time
-#    
-#    - name: Set LogLevel to INFO
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*LogLevel\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*LogLevel\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*LogLevel\s+
-#          line: LogLevel INFO
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - NIST-800-53-AC-17(a)
-#      - NIST-800-53-CM-6(a)
-#      - low_complexity
-#      - low_disruption
-#      - low_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#      - sshd_set_loglevel_info
-#    
-#    
-#    
-#    - name: Set SSH MaxSessions limit
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*MaxSessions\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*MaxSessions\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*MaxSessions\s+
-#          line: MaxSessions {{ var_sshd_max_sessions }}
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - PCI-DSSv4-2.2.6
-#      - configure_strategy
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - sshd_set_max_sessions
-#    
-#    
-#    
-#    - name: Ensure SSH MaxStartups is configured
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*MaxStartups\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*MaxStartups\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*MaxStartups\s+
-#          line: MaxStartups {{ var_sshd_set_maxstartups }}
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - PCI-DSSv4-2.2.6
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#      - sshd_set_maxstartups
-#    
-#    
-#    
-#    - name: Use Only Strong Key Exchange algorithms
-#      block:
-#    
-#      - name: Check for duplicate values
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*KexAlgorithms\s+
-#          state: absent
-#        check_mode: true
-#        changed_when: false
-#        register: dupes
-#    
-#      - name: Deduplicate values from /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: false
-#          regexp: (?i)^\s*KexAlgorithms\s+
-#          state: absent
-#        when: dupes.found is defined and dupes.found > 1
-#    
-#      - name: Insert correct line to /etc/ssh/sshd_config
-#        lineinfile:
-#          path: /etc/ssh/sshd_config
-#          create: true
-#          regexp: (?i)^\s*KexAlgorithms\s+
-#          line: KexAlgorithms {{ sshd_strong_kex }}
-#          state: present
-#          insertbefore: ^[#\s]*Match
-#          validate: /usr/sbin/sshd -t -f %s
-#      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-#      tags:
-#      - PCI-DSS-Req-2.3
-#      - PCI-DSSv4-2.2.7
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - restrict_strategy
-#      - sshd_use_strong_kex
-#    
-#    - name: Ensure xserver-xorg is removed
-#      package:
-#        name: xserver-xorg
-#        state: absent
-#      tags:
-#      - NIST-800-53-CM-6(a)
-#      - NIST-800-53-CM-7(a)
-#      - NIST-800-53-CM-7(b)
-#      - disable_strategy
-#      - low_complexity
-#      - low_disruption
-#      - medium_severity
-#      - no_reboot_needed
-#      - package_xorg-x11-server-common_removed
-...
+    - name: Test for existence /etc/ssh/sshd_config
+      stat:
+        path: /etc/ssh/sshd_config
+      register: file_exists
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - configure_strategy
+      - file_groupowner_sshd_config
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+    
+    - name: Ensure group owner 0 on /etc/ssh/sshd_config
+      file:
+        path: /etc/ssh/sshd_config
+        group: '0'
+      when:
+      - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      - file_exists.stat is defined and file_exists.stat.exists
+      tags:
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - configure_strategy
+      - file_groupowner_sshd_config
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+    
+    - name: Test for existence /etc/ssh/sshd_config
+      stat:
+        path: /etc/ssh/sshd_config
+      register: file_exists
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - configure_strategy
+      - file_owner_sshd_config
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+    
+    - name: Ensure owner 0 on /etc/ssh/sshd_config
+      file:
+        path: /etc/ssh/sshd_config
+        owner: '0'
+      when:
+      - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      - file_exists.stat is defined and file_exists.stat.exists
+      tags:
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - configure_strategy
+      - file_owner_sshd_config
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+    
+    - name: Test for existence /etc/ssh/sshd_config
+      stat:
+        path: /etc/ssh/sshd_config
+      register: file_exists
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - PCI-DSSv4-2.2.6
+      - configure_strategy
+      - file_permissions_sshd_config
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+    
+    - name: Ensure permission u-xs,g-xwrs,o-xwrt on /etc/ssh/sshd_config
+      file:
+        path: /etc/ssh/sshd_config
+        mode: u-xs,g-xwrs,o-xwrt
+      when:
+      - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      - file_exists.stat is defined and file_exists.stat.exists
+      tags:
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - PCI-DSSv4-2.2.6
+      - configure_strategy
+      - file_permissions_sshd_config
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+    
+    - name: Find root:root-owned keys
+      ansible.builtin.command: find -H /etc/ssh/ -maxdepth 1 -user root -regex ".*_key$"
+        -type f -group root -perm /u+xs,g+xwrs,o+xwrt
+      register: root_owned_keys
+      changed_when: false
+      failed_when: false
+      check_mode: false
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-171-3.1.13
+      - NIST-800-171-3.13.10
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - PCI-DSS-Req-2.2.4
+      - PCI-DSSv4-2.2.6
+      - configure_strategy
+      - file_permissions_sshd_private_key
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+    
+    - name: Set permissions for root:root-owned keys
+      ansible.builtin.file:
+        path: '{{ item }}'
+        mode: u-xs,g-xwrs,o-xwrt
+        state: file
+      with_items:
+      - '{{ root_owned_keys.stdout_lines }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-171-3.1.13
+      - NIST-800-171-3.13.10
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - PCI-DSS-Req-2.2.4
+      - PCI-DSSv4-2.2.6
+      - configure_strategy
+      - file_permissions_sshd_private_key
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+    
+    - name: Find /etc/ssh/ file(s)
+      command: find -H /etc/ssh/ -maxdepth 1 -perm /u+xs,g+xws,o+xwt  -type f -regex "^.*\.pub$"
+      register: files_found
+      changed_when: false
+      failed_when: false
+      check_mode: false
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-171-3.1.13
+      - NIST-800-171-3.13.10
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - PCI-DSS-Req-2.2.4
+      - PCI-DSSv4-2.2.6
+      - configure_strategy
+      - file_permissions_sshd_pub_key
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+    
+    - name: Set permissions for /etc/ssh/ file(s)
+      file:
+        path: '{{ item }}'
+        mode: u-xs,g-xws,o-xwt
+        state: file
+      with_items:
+      - '{{ files_found.stdout_lines }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-171-3.1.13
+      - NIST-800-171-3.13.10
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-6(1)
+      - NIST-800-53-CM-6(a)
+      - PCI-DSS-Req-2.2.4
+      - PCI-DSSv4-2.2.6
+      - configure_strategy
+      - file_permissions_sshd_pub_key
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+    
+    
+    
+    - name: Set SSH Client Alive Count Max
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*ClientAliveCountMax\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*ClientAliveCountMax\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*ClientAliveCountMax\s+
+          line: ClientAliveCountMax {{ var_sshd_set_keepalive }}
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CJIS-5.5.6
+      - DISA-STIG-UBTU-20-010036
+      - NIST-800-171-3.1.11
+      - NIST-800-53-AC-12
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-2(5)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-SC-10
+      - PCI-DSS-Req-8.1.8
+      - PCI-DSSv4-8.2.8
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+      - sshd_set_keepalive
+    
+    - name: Disable Host-Based Authentication
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*HostbasedAuthentication\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*HostbasedAuthentication\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*HostbasedAuthentication\s+
+          line: HostbasedAuthentication no
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CJIS-5.5.6
+      - NIST-800-171-3.1.12
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-3
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - PCI-DSSv4-8.3.1
+      - disable_host_auth
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+    
+    - name: Disable SSH Access via Empty Passwords
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*PermitEmptyPasswords\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*PermitEmptyPasswords\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*PermitEmptyPasswords\s+
+          line: PermitEmptyPasswords no
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CJIS-5.5.6
+      - DISA-STIG-UBTU-20-010047
+      - NIST-800-171-3.1.1
+      - NIST-800-171-3.1.5
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - PCI-DSS-Req-2.2.4
+      - PCI-DSSv4-2.2.6
+      - high_severity
+      - low_complexity
+      - low_disruption
+      - no_reboot_needed
+      - restrict_strategy
+      - sshd_disable_empty_passwords
+    
+    - name: Disable SSH Support for .rhosts Files
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*IgnoreRhosts\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*IgnoreRhosts\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*IgnoreRhosts\s+
+          line: IgnoreRhosts yes
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CJIS-5.5.6
+      - NIST-800-171-3.1.12
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - PCI-DSSv4-2.2.6
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+      - sshd_disable_rhosts
+    
+    - name: Disable SSH Root Login
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*PermitRootLogin\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*PermitRootLogin\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*PermitRootLogin\s+
+          line: PermitRootLogin no
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CJIS-5.5.6
+      - NIST-800-171-3.1.1
+      - NIST-800-171-3.1.5
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-6(2)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-IA-2
+      - NIST-800-53-IA-2(5)
+      - PCI-DSS-Req-2.2.4
+      - PCI-DSSv4-2.2.6
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+      - sshd_disable_root_login
+    
+    - name: Do Not Allow SSH Environment Options
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*PermitUserEnvironment\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*PermitUserEnvironment\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*PermitUserEnvironment\s+
+          line: PermitUserEnvironment no
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CJIS-5.5.6
+      - DISA-STIG-UBTU-20-010047
+      - NIST-800-171-3.1.12
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - PCI-DSS-Req-2.2.4
+      - PCI-DSSv4-2.2.6
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+      - sshd_do_not_permit_user_env
+    
+    - name: Enable PAM
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*UsePAM\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*UsePAM\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*UsePAM\s+
+          line: UsePAM yes
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - DISA-STIG-UBTU-20-010035
+      - PCI-DSSv4-2.2.4
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+      - sshd_enable_pam
+    
+    - name: Enable SSH Warning Banner
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*Banner\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*Banner\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*Banner\s+
+          line: Banner /etc/issue.net
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CJIS-5.5.6
+      - DISA-STIG-UBTU-20-010038
+      - NIST-800-171-3.1.9
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-AC-8(a)
+      - NIST-800-53-AC-8(c)
+      - NIST-800-53-CM-6(a)
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+      - sshd_enable_warning_banner_net
+    
+    
+    
+    - name: Ensure SSH LoginGraceTime is configured
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*LoginGraceTime\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*LoginGraceTime\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*LoginGraceTime\s+
+          line: LoginGraceTime {{ var_sshd_set_login_grace_time }}
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+      - sshd_set_login_grace_time
+    
+    - name: Set LogLevel to INFO
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*LogLevel\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*LogLevel\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*LogLevel\s+
+          line: LogLevel INFO
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-CM-6(a)
+      - low_complexity
+      - low_disruption
+      - low_severity
+      - no_reboot_needed
+      - restrict_strategy
+      - sshd_set_loglevel_info
+    
+    
+    
+    - name: Set SSH MaxSessions limit
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*MaxSessions\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*MaxSessions\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*MaxSessions\s+
+          line: MaxSessions {{ var_sshd_max_sessions }}
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - PCI-DSSv4-2.2.6
+      - configure_strategy
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - sshd_set_max_sessions
+    
+    
+    
+    - name: Ensure SSH MaxStartups is configured
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*MaxStartups\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*MaxStartups\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*MaxStartups\s+
+          line: MaxStartups {{ var_sshd_set_maxstartups }}
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - PCI-DSSv4-2.2.6
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+      - sshd_set_maxstartups
+    
+    
+    
+    - name: Use Only Strong Key Exchange algorithms
+      block:
+    
+      - name: Check for duplicate values
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*KexAlgorithms\s+
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: dupes
+    
+      - name: Deduplicate values from /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: false
+          regexp: (?i)^\s*KexAlgorithms\s+
+          state: absent
+        when: dupes.found is defined and dupes.found > 1
+    
+      - name: Insert correct line to /etc/ssh/sshd_config
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          create: true
+          regexp: (?i)^\s*KexAlgorithms\s+
+          line: KexAlgorithms {{ sshd_strong_kex }}
+          state: present
+          insertbefore: ^[#\s]*Match
+          validate: /usr/sbin/sshd -t -f %s
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - PCI-DSS-Req-2.3
+      - PCI-DSSv4-2.2.7
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - restrict_strategy
+      - sshd_use_strong_kex
+    
+    - name: Ensure xserver-xorg is removed
+      package:
+        name: xserver-xorg
+        state: absent
+      tags:
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - disable_strategy
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - package_xorg-x11-server-common_removed
+    
