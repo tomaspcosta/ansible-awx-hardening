@@ -2760,432 +2760,432 @@
       - sysctl_net_ipv6_conf_all_accept_ra
     
     
-    - name: Ensure sysctl net.ipv6.conf.all.accept_ra is set
-      sysctl:
-        name: net.ipv6.conf.all.accept_ra
-        value: '{{ sysctl_net_ipv6_conf_all_accept_ra_value }}'
-        sysctl_file: /etc/sysctl.conf
-        state: present
-        reload: true
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_all_accept_ra
+    # - name: Ensure sysctl net.ipv6.conf.all.accept_ra is set
+    #   sysctl:
+    #     name: net.ipv6.conf.all.accept_ra
+    #     value: '{{ sysctl_net_ipv6_conf_all_accept_ra_value }}'
+    #     sysctl_file: /etc/sysctl.conf
+    #     state: present
+    #     reload: true
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_all_accept_ra
     
-    - name: List /etc/sysctl.d/*.conf files
-      find:
-        paths:
-        - /etc/sysctl.d/
-        - /run/sysctl.d/
-        - /usr/local/lib/sysctl.d/
-        - /usr/lib/sysctl.d/
-        contains: ^[\s]*net.ipv6.conf.all.accept_redirects.*$
-        patterns: '*.conf'
-        file_type: any
-      register: find_sysctl_d
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-6(b)
-      - NIST-800-53-CM-6.1(iv)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_all_accept_redirects
+    # - name: List /etc/sysctl.d/*.conf files
+    #   find:
+    #     paths:
+    #     - /etc/sysctl.d/
+    #     - /run/sysctl.d/
+    #     - /usr/local/lib/sysctl.d/
+    #     - /usr/lib/sysctl.d/
+    #     contains: ^[\s]*net.ipv6.conf.all.accept_redirects.*$
+    #     patterns: '*.conf'
+    #     file_type: any
+    #   register: find_sysctl_d
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-6(b)
+    #   - NIST-800-53-CM-6.1(iv)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_all_accept_redirects
     
-    - name: Comment out any occurrences of net.ipv6.conf.all.accept_redirects from config
-        files
-      replace:
-        path: '{{ item.path }}'
-        regexp: ^[\s]*net.ipv6.conf.all.accept_redirects
-        replace: '#net.ipv6.conf.all.accept_redirects'
-      loop: '{{ find_sysctl_d.files }}'
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-6(b)
-      - NIST-800-53-CM-6.1(iv)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_all_accept_redirects
-    
-    
-    - name: Ensure sysctl net.ipv6.conf.all.accept_redirects is set
-      sysctl:
-        name: net.ipv6.conf.all.accept_redirects
-        value: '{{ sysctl_net_ipv6_conf_all_accept_redirects_value }}'
-        sysctl_file: /etc/sysctl.conf
-        state: present
-        reload: true
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-6(b)
-      - NIST-800-53-CM-6.1(iv)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_all_accept_redirects
-    
-    - name: List /etc/sysctl.d/*.conf files
-      find:
-        paths:
-        - /etc/sysctl.d/
-        - /run/sysctl.d/
-        - /usr/local/lib/sysctl.d/
-        - /usr/lib/sysctl.d/
-        contains: ^[\s]*net.ipv6.conf.all.accept_source_route.*$
-        patterns: '*.conf'
-        file_type: any
-      register: find_sysctl_d
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_all_accept_source_route
-    
-    - name: Comment out any occurrences of net.ipv6.conf.all.accept_source_route from
-        config files
-      replace:
-        path: '{{ item.path }}'
-        regexp: ^[\s]*net.ipv6.conf.all.accept_source_route
-        replace: '#net.ipv6.conf.all.accept_source_route'
-      loop: '{{ find_sysctl_d.files }}'
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_all_accept_source_route
+    # - name: Comment out any occurrences of net.ipv6.conf.all.accept_redirects from config
+    #     files
+    #   replace:
+    #     path: '{{ item.path }}'
+    #     regexp: ^[\s]*net.ipv6.conf.all.accept_redirects
+    #     replace: '#net.ipv6.conf.all.accept_redirects'
+    #   loop: '{{ find_sysctl_d.files }}'
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-6(b)
+    #   - NIST-800-53-CM-6.1(iv)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_all_accept_redirects
     
     
-    - name: Ensure sysctl net.ipv6.conf.all.accept_source_route is set
-      sysctl:
-        name: net.ipv6.conf.all.accept_source_route
-        value: '{{ sysctl_net_ipv6_conf_all_accept_source_route_value }}'
-        sysctl_file: /etc/sysctl.conf
-        state: present
-        reload: true
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_all_accept_source_route
+    # - name: Ensure sysctl net.ipv6.conf.all.accept_redirects is set
+    #   sysctl:
+    #     name: net.ipv6.conf.all.accept_redirects
+    #     value: '{{ sysctl_net_ipv6_conf_all_accept_redirects_value }}'
+    #     sysctl_file: /etc/sysctl.conf
+    #     state: present
+    #     reload: true
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-6(b)
+    #   - NIST-800-53-CM-6.1(iv)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_all_accept_redirects
     
-    - name: List /etc/sysctl.d/*.conf files
-      find:
-        paths:
-        - /etc/sysctl.d/
-        - /run/sysctl.d/
-        - /usr/local/lib/sysctl.d/
-        - /usr/lib/sysctl.d/
-        contains: ^[\s]*net.ipv6.conf.all.forwarding.*$
-        patterns: '*.conf'
-        file_type: any
-      register: find_sysctl_d
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-6(b)
-      - NIST-800-53-CM-6.1(iv)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_all_forwarding
+    # - name: List /etc/sysctl.d/*.conf files
+    #   find:
+    #     paths:
+    #     - /etc/sysctl.d/
+    #     - /run/sysctl.d/
+    #     - /usr/local/lib/sysctl.d/
+    #     - /usr/lib/sysctl.d/
+    #     contains: ^[\s]*net.ipv6.conf.all.accept_source_route.*$
+    #     patterns: '*.conf'
+    #     file_type: any
+    #   register: find_sysctl_d
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_all_accept_source_route
     
-    - name: Comment out any occurrences of net.ipv6.conf.all.forwarding from config files
-      replace:
-        path: '{{ item.path }}'
-        regexp: ^[\s]*net.ipv6.conf.all.forwarding
-        replace: '#net.ipv6.conf.all.forwarding'
-      loop: '{{ find_sysctl_d.files }}'
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-6(b)
-      - NIST-800-53-CM-6.1(iv)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_all_forwarding
-    
-    
-    - name: Ensure sysctl net.ipv6.conf.all.forwarding is set
-      sysctl:
-        name: net.ipv6.conf.all.forwarding
-        value: '{{ sysctl_net_ipv6_conf_all_forwarding_value }}'
-        sysctl_file: /etc/sysctl.conf
-        state: present
-        reload: true
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-6(b)
-      - NIST-800-53-CM-6.1(iv)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_all_forwarding
-    
-    - name: List /etc/sysctl.d/*.conf files
-      find:
-        paths:
-        - /etc/sysctl.d/
-        - /run/sysctl.d/
-        - /usr/local/lib/sysctl.d/
-        - /usr/lib/sysctl.d/
-        contains: ^[\s]*net.ipv6.conf.default.accept_ra.*$
-        patterns: '*.conf'
-        file_type: any
-      register: find_sysctl_d
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_default_accept_ra
-    
-    - name: Comment out any occurrences of net.ipv6.conf.default.accept_ra from config
-        files
-      replace:
-        path: '{{ item.path }}'
-        regexp: ^[\s]*net.ipv6.conf.default.accept_ra
-        replace: '#net.ipv6.conf.default.accept_ra'
-      loop: '{{ find_sysctl_d.files }}'
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_default_accept_ra
+    # - name: Comment out any occurrences of net.ipv6.conf.all.accept_source_route from
+    #     config files
+    #   replace:
+    #     path: '{{ item.path }}'
+    #     regexp: ^[\s]*net.ipv6.conf.all.accept_source_route
+    #     replace: '#net.ipv6.conf.all.accept_source_route'
+    #   loop: '{{ find_sysctl_d.files }}'
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_all_accept_source_route
     
     
-    - name: Ensure sysctl net.ipv6.conf.default.accept_ra is set
-      sysctl:
-        name: net.ipv6.conf.default.accept_ra
-        value: '{{ sysctl_net_ipv6_conf_default_accept_ra_value }}'
-        sysctl_file: /etc/sysctl.conf
-        state: present
-        reload: true
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_default_accept_ra
+    # - name: Ensure sysctl net.ipv6.conf.all.accept_source_route is set
+    #   sysctl:
+    #     name: net.ipv6.conf.all.accept_source_route
+    #     value: '{{ sysctl_net_ipv6_conf_all_accept_source_route_value }}'
+    #     sysctl_file: /etc/sysctl.conf
+    #     state: present
+    #     reload: true
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_all_accept_source_route
     
-    - name: List /etc/sysctl.d/*.conf files
-      find:
-        paths:
-        - /etc/sysctl.d/
-        - /run/sysctl.d/
-        - /usr/local/lib/sysctl.d/
-        - /usr/lib/sysctl.d/
-        contains: ^[\s]*net.ipv6.conf.default.accept_redirects.*$
-        patterns: '*.conf'
-        file_type: any
-      register: find_sysctl_d
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_default_accept_redirects
+    # - name: List /etc/sysctl.d/*.conf files
+    #   find:
+    #     paths:
+    #     - /etc/sysctl.d/
+    #     - /run/sysctl.d/
+    #     - /usr/local/lib/sysctl.d/
+    #     - /usr/lib/sysctl.d/
+    #     contains: ^[\s]*net.ipv6.conf.all.forwarding.*$
+    #     patterns: '*.conf'
+    #     file_type: any
+    #   register: find_sysctl_d
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-6(b)
+    #   - NIST-800-53-CM-6.1(iv)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_all_forwarding
     
-    - name: Comment out any occurrences of net.ipv6.conf.default.accept_redirects from
-        config files
-      replace:
-        path: '{{ item.path }}'
-        regexp: ^[\s]*net.ipv6.conf.default.accept_redirects
-        replace: '#net.ipv6.conf.default.accept_redirects'
-      loop: '{{ find_sysctl_d.files }}'
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_default_accept_redirects
-    
-    
-    - name: Ensure sysctl net.ipv6.conf.default.accept_redirects is set
-      sysctl:
-        name: net.ipv6.conf.default.accept_redirects
-        value: '{{ sysctl_net_ipv6_conf_default_accept_redirects_value }}'
-        sysctl_file: /etc/sysctl.conf
-        state: present
-        reload: true
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_default_accept_redirects
-    
-    - name: List /etc/sysctl.d/*.conf files
-      find:
-        paths:
-        - /etc/sysctl.d/
-        - /run/sysctl.d/
-        - /usr/local/lib/sysctl.d/
-        - /usr/lib/sysctl.d/
-        contains: ^[\s]*net.ipv6.conf.default.accept_source_route.*$
-        patterns: '*.conf'
-        file_type: any
-      register: find_sysctl_d
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-6(b)
-      - NIST-800-53-CM-6.1(iv)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - PCI-DSS-Req-1.4.3
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_default_accept_source_route
-    
-    - name: Comment out any occurrences of net.ipv6.conf.default.accept_source_route from
-        config files
-      replace:
-        path: '{{ item.path }}'
-        regexp: ^[\s]*net.ipv6.conf.default.accept_source_route
-        replace: '#net.ipv6.conf.default.accept_source_route'
-      loop: '{{ find_sysctl_d.files }}'
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-6(b)
-      - NIST-800-53-CM-6.1(iv)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - PCI-DSS-Req-1.4.3
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_default_accept_source_route
+    # - name: Comment out any occurrences of net.ipv6.conf.all.forwarding from config files
+    #   replace:
+    #     path: '{{ item.path }}'
+    #     regexp: ^[\s]*net.ipv6.conf.all.forwarding
+    #     replace: '#net.ipv6.conf.all.forwarding'
+    #   loop: '{{ find_sysctl_d.files }}'
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-6(b)
+    #   - NIST-800-53-CM-6.1(iv)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_all_forwarding
     
     
-    - name: Ensure sysctl net.ipv6.conf.default.accept_source_route is set
-      sysctl:
-        name: net.ipv6.conf.default.accept_source_route
-        value: '{{ sysctl_net_ipv6_conf_default_accept_source_route_value }}'
-        sysctl_file: /etc/sysctl.conf
-        state: present
-        reload: true
-      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-      tags:
-      - NIST-800-171-3.1.20
-      - NIST-800-53-CM-6(a)
-      - NIST-800-53-CM-6(b)
-      - NIST-800-53-CM-6.1(iv)
-      - NIST-800-53-CM-7(a)
-      - NIST-800-53-CM-7(b)
-      - PCI-DSS-Req-1.4.3
-      - disable_strategy
-      - low_complexity
-      - medium_disruption
-      - medium_severity
-      - reboot_required
-      - sysctl_net_ipv6_conf_default_accept_source_route
+    # - name: Ensure sysctl net.ipv6.conf.all.forwarding is set
+    #   sysctl:
+    #     name: net.ipv6.conf.all.forwarding
+    #     value: '{{ sysctl_net_ipv6_conf_all_forwarding_value }}'
+    #     sysctl_file: /etc/sysctl.conf
+    #     state: present
+    #     reload: true
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-6(b)
+    #   - NIST-800-53-CM-6.1(iv)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_all_forwarding
+    
+    # - name: List /etc/sysctl.d/*.conf files
+    #   find:
+    #     paths:
+    #     - /etc/sysctl.d/
+    #     - /run/sysctl.d/
+    #     - /usr/local/lib/sysctl.d/
+    #     - /usr/lib/sysctl.d/
+    #     contains: ^[\s]*net.ipv6.conf.default.accept_ra.*$
+    #     patterns: '*.conf'
+    #     file_type: any
+    #   register: find_sysctl_d
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_default_accept_ra
+    
+    # - name: Comment out any occurrences of net.ipv6.conf.default.accept_ra from config
+    #     files
+    #   replace:
+    #     path: '{{ item.path }}'
+    #     regexp: ^[\s]*net.ipv6.conf.default.accept_ra
+    #     replace: '#net.ipv6.conf.default.accept_ra'
+    #   loop: '{{ find_sysctl_d.files }}'
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_default_accept_ra
+    
+    
+    # - name: Ensure sysctl net.ipv6.conf.default.accept_ra is set
+    #   sysctl:
+    #     name: net.ipv6.conf.default.accept_ra
+    #     value: '{{ sysctl_net_ipv6_conf_default_accept_ra_value }}'
+    #     sysctl_file: /etc/sysctl.conf
+    #     state: present
+    #     reload: true
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_default_accept_ra
+    
+    # - name: List /etc/sysctl.d/*.conf files
+    #   find:
+    #     paths:
+    #     - /etc/sysctl.d/
+    #     - /run/sysctl.d/
+    #     - /usr/local/lib/sysctl.d/
+    #     - /usr/lib/sysctl.d/
+    #     contains: ^[\s]*net.ipv6.conf.default.accept_redirects.*$
+    #     patterns: '*.conf'
+    #     file_type: any
+    #   register: find_sysctl_d
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_default_accept_redirects
+    
+    # - name: Comment out any occurrences of net.ipv6.conf.default.accept_redirects from
+    #     config files
+    #   replace:
+    #     path: '{{ item.path }}'
+    #     regexp: ^[\s]*net.ipv6.conf.default.accept_redirects
+    #     replace: '#net.ipv6.conf.default.accept_redirects'
+    #   loop: '{{ find_sysctl_d.files }}'
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_default_accept_redirects
+    
+    
+    # - name: Ensure sysctl net.ipv6.conf.default.accept_redirects is set
+    #   sysctl:
+    #     name: net.ipv6.conf.default.accept_redirects
+    #     value: '{{ sysctl_net_ipv6_conf_default_accept_redirects_value }}'
+    #     sysctl_file: /etc/sysctl.conf
+    #     state: present
+    #     reload: true
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_default_accept_redirects
+    
+    # - name: List /etc/sysctl.d/*.conf files
+    #   find:
+    #     paths:
+    #     - /etc/sysctl.d/
+    #     - /run/sysctl.d/
+    #     - /usr/local/lib/sysctl.d/
+    #     - /usr/lib/sysctl.d/
+    #     contains: ^[\s]*net.ipv6.conf.default.accept_source_route.*$
+    #     patterns: '*.conf'
+    #     file_type: any
+    #   register: find_sysctl_d
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-6(b)
+    #   - NIST-800-53-CM-6.1(iv)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - PCI-DSS-Req-1.4.3
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_default_accept_source_route
+    
+    # - name: Comment out any occurrences of net.ipv6.conf.default.accept_source_route from
+    #     config files
+    #   replace:
+    #     path: '{{ item.path }}'
+    #     regexp: ^[\s]*net.ipv6.conf.default.accept_source_route
+    #     replace: '#net.ipv6.conf.default.accept_source_route'
+    #   loop: '{{ find_sysctl_d.files }}'
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-6(b)
+    #   - NIST-800-53-CM-6.1(iv)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - PCI-DSS-Req-1.4.3
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_default_accept_source_route
+    
+    
+    # - name: Ensure sysctl net.ipv6.conf.default.accept_source_route is set
+    #   sysctl:
+    #     name: net.ipv6.conf.default.accept_source_route
+    #     value: '{{ sysctl_net_ipv6_conf_default_accept_source_route_value }}'
+    #     sysctl_file: /etc/sysctl.conf
+    #     state: present
+    #     reload: true
+    #   when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    #   tags:
+    #   - NIST-800-171-3.1.20
+    #   - NIST-800-53-CM-6(a)
+    #   - NIST-800-53-CM-6(b)
+    #   - NIST-800-53-CM-6.1(iv)
+    #   - NIST-800-53-CM-7(a)
+    #   - NIST-800-53-CM-7(b)
+    #   - PCI-DSS-Req-1.4.3
+    #   - disable_strategy
+    #   - low_complexity
+    #   - medium_disruption
+    #   - medium_severity
+    #   - reboot_required
+    #   - sysctl_net_ipv6_conf_default_accept_source_route
     
     - name: List /etc/sysctl.d/*.conf files
       find:
