@@ -26,17 +26,18 @@
       ansible.builtin.debug:
         var: generate_remediation.rc
 
-    - name: Slurp the remediation file from the host
+    - name: Slurp the report from the node
       ansible.builtin.slurp:
-        src: /tmp/{{ inventory_hostname }}-remediation.yml
-      register: slurp_remediation
+        src: /tmp/{{ ansible_hostname }}-remediation.yml
+      register: slurp_report
 
     - name: Create reports directory on the master node
       ansible.builtin.file:
-        path: /home/reports
+        path: /home/master/reports
         state: directory
         mode: '0755'
       delegate_to: master
+      remote_user: master
       run_once: true
 
     - name: Transfer the remediation file to the master node
