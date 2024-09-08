@@ -7,10 +7,10 @@
         src: /home/master/remediations/{{ inventory_hostname }}-remediation.yml
         dest: /tmp/{{ inventory_hostname }}-remediation.yml
       delegate_to: localhost
-      remote_src: no
 
     - name: Apply the remediation file on the target host
-      ansible.builtin.command: ansible-playbook /tmp/{{ inventory_hostname }}-remediation.yml
+      ansible.builtin.command:
+        cmd: ansible-playbook /tmp/{{ inventory_hostname }}-remediation.yml
       ignore_errors: yes
 
     - name: Cleanup the remediation file on the target host
