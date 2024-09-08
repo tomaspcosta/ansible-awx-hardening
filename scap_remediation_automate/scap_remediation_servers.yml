@@ -26,10 +26,10 @@
       ansible.builtin.debug:
         var: generate_remediation.rc
 
-    - name: Slurp the report from the node
+    - name: Slurp the remediation file from the node
       ansible.builtin.slurp:
         src: /tmp/{{ ansible_hostname }}-remediation.yml
-      register: slurp_report
+      register: slurp_remediation
 
     - name: Create reports directory on the master node
       ansible.builtin.file:
@@ -40,17 +40,24 @@
       remote_user: master
       run_once: true
 
-    - name: Transfer the remediation file to the master node
+    - name: Ensure correct ownership on the reports directory
+      ansible.builtin.command:
+        cmd: chown -R master:master /home/master/reports
+      delegate_to: master
+      remote_user: master
+      run_once: true
+
+    - name: Write remediation file to master node
       ansible.builtin.copy:
         content: "{{ slurp_remediation.content | b64decode }}"
-        dest: /home/reports/{{ inventory_hostname }}-remediation.yml
-        mode: '0644'
+        dest: /home/master/reports/{{ inventory_hostname }}-remediation.yml
+        mode: '0664'
       delegate_to: master
+      remote_user: master
 
-    # Apply the remediation back to the original host from the master
-    - name: Apply the remediation file from the master to the host
-      ansible.builtin.command: >
-        ansible-playbook /home/reports/{{ inventory_hostname }}-remediation.yml
+    # Apply the remediation file from the master node back to the host
+    - name: Apply the remediation file
+      ansible.builtin.command: ansible-playbook /home/master/reports/{{ inventory_hostname }}-remediation.yml
       delegate_to: master
       ignore_errors: yes
 
