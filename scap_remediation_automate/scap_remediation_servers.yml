@@ -1,7 +1,7 @@
 ---
 - name: Generate and Apply SCAP Remediation
   hosts: all
-  become: yes  # Use become to execute commands with elevated privileges
+  become: yes  # Ensure that tasks are executed with elevated privileges
   tasks:
     - name: Ensure OpenSCAP is installed
       ansible.builtin.apt:
@@ -54,8 +54,3 @@
     - name: Print remediation application output
       ansible.builtin.debug:
         msg: "Remediation application output: {{ apply_remediation.stdout }}"
-
-    - name: Cleanup remediation file
-      ansible.builtin.file:
-        path: /tmp/{{ inventory_hostname }}-remediation.yml
-        state: absent
