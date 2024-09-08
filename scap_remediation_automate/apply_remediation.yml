@@ -1,6 +1,19 @@
 ---
-- name: Apply SCAP Remediation
+- name: Apply SCAP Remediation on target hosts
   hosts: all
   tasks:
-    - name: Apply the remediation file from the master node
-      ansible.builtin.command: ansible-playbook /home/master/remediations/{{ inventory_hostname }}-remediation.yml
+    - name: Copy the remediation file from master to the target host
+      ansible.builtin.copy:
+        src: /home/master/remediations/{{ inventory_hostname }}-remediation.yml
+        dest: /tmp/{{ inventory_hostname }}-remediation.yml
+      delegate_to: master
+      remote_user: master
+
+    - name: Apply the remediation file on the target host
+      ansible.builtin.command: ansible-playbook /tmp/{{ inventory_hostname }}-remediation.yml
+      ignore_errors: yes
+
+    - name: Cleanup the remediation file on the target host
+      ansible.builtin.file:
+        path: /tmp/{{ inventory_hostname }}-remediation.yml
+        state: absent
