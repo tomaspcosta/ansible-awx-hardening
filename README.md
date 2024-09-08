@@ -25,9 +25,9 @@ The repository is organized as follows:
 - **`remediate_hosts.yml`**: Applies remediation to general hosts.
 - **`remediate_master.yml`**: Applies remediation to the master host.
 - **`remediate_master_lvl2.yml`**: Provides advanced remediation for the master host.
-- **`scap_remediation_desktop.yml`**: Generates and applies SCAP remediation for desktop systems using the `xccdf_org.ssgproject.content_profile_cis_level1_workstation` profile.
-- **`scap_remediation_master.yml`**: Generates and applies SCAP remediation for the master system using the `xccdf_org.ssgproject.content_profile_cis_level2_server` profile.
-- **`scap_remediation_servers.yml`**: Generates and applies SCAP remediation for server systems using the `xccdf_org.ssgproject.content_profile_cis_level1_server` profile.
+- **`scap_remediation_desktop.yml`**: Generates and applies SCAP remediation for desktop systems.
+- **`scap_remediation_master.yml`**: Generates and applies SCAP remediation for the master system.
+- **`scap_remediation_servers.yml`**: Generates and applies SCAP remediation for server systems.
 
 ## Configuration
 
