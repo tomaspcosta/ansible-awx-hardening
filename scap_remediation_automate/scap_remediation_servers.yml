@@ -54,20 +54,3 @@
         mode: '0664'
       delegate_to: master
       remote_user: master
-
-    # Apply the remediation file from the master node back to the host
-    - name: Apply the remediation file
-      ansible.builtin.command: ansible-playbook /home/master/remediations/{{ inventory_hostname }}-remediation.yml
-      delegate_to: master
-      ignore_errors: yes
-
-    - name: Cleanup local remediation file on the host
-      ansible.builtin.file:
-        path: /tmp/{{ inventory_hostname }}-remediation.yml
-        state: absent
-
-    - name: Cleanup remediation file on the master node
-      ansible.builtin.file:
-        path: /home/remediations/{{ inventory_hostname }}-remediation.yml
-        state: absent
-      delegate_to: master
