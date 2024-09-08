@@ -7,22 +7,16 @@
         src: /home/master/remediations/{{ inventory_hostname }}-remediation.yml
         dest: /tmp/{{ inventory_hostname }}-remediation.yml
       delegate_to: localhost
-      # Set appropriate permissions after the file has been copied
-      # This is not done in the copy task but rather after ensuring the file is present
 
     - name: Ensure the correct permissions for the remediation file
       ansible.builtin.file:
         path: /tmp/{{ inventory_hostname }}-remediation.yml
         state: file
         mode: '0664'
-      # This ensures the file has the correct permissions
 
     - name: Apply the remediation file on the target host
       ansible.builtin.command:
         cmd: ansible-playbook /tmp/{{ inventory_hostname }}-remediation.yml
-      # Run the remediation playbook on the target host
-      # Ensure ansible-playbook is in the PATH on the target host
-      # If ansible-playbook is not available on target hosts, consider using a local action instead
 
     - name: Cleanup the remediation file on the target host
       ansible.builtin.file:
