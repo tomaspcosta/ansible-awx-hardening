@@ -1,7 +1,6 @@
 ---
 - name: Generate and Apply SCAP Remediation
   hosts: all
-  become: yes  # Ensure that tasks are executed with elevated privileges
   tasks:
     - name: Ensure OpenSCAP is installed
       ansible.builtin.apt:
@@ -25,32 +24,36 @@
 
     - name: Print remediation generation status
       ansible.builtin.debug:
-        msg: "Remediation generation status: {{ generate_remediation.rc }}"
+        var: generate_remediation.rc
 
-    - name: Check if the remediation file was generated
-      ansible.builtin.stat:
-        path: /tmp/{{ inventory_hostname }}-remediation.yml
-      register: remediation_file
-
-    - name: Fail if the remediation file was not created
-      ansible.builtin.fail:
-        msg: "The remediation file /tmp/{{ inventory_hostname }}-remediation.yml was not created."
-      when: not remediation_file.stat.exists
-
-    - name: Print remediation file details
-      ansible.builtin.debug:
-        msg: "Remediation file details: {{ remediation_file }}"
-
-    - name: Apply the remediation file
-      ansible.builtin.command: >
-        ansible-playbook /tmp/{{ inventory_hostname }}-remediation.yml
-      register: apply_remediation
+    - name: Fetch the remediation file to the AWX server
+      ansible.builtin.fetch:
+        src: /tmp/{{ inventory_hostname }}-remediation.yml
+        dest: /tmp/reports/
+        flat: yes
       ignore_errors: yes
 
-    - name: Print remediation application status
-      ansible.builtin.debug:
-        msg: "Remediation application status: {{ apply_remediation.rc }}"
+    - name: Cleanup the remediation file on the remote host
+      ansible.builtin.file:
+        path: /tmp/{{ inventory_hostname }}-remediation.yml
+        state: absent
 
-    - name: Print remediation application output
-      ansible.builtin.debug:
-        msg: "Remediation application output: {{ apply_remediation.stdout }}"
+    - name: Create reports directory on the AWX server
+      ansible.builtin.file:
+        path: /tmp/reports
+        state: directory
+        mode: '0755'
+      delegate_to: localhost
+      run_once: true
+
+    - name: Apply the remediation file from the AWX server
+      ansible.builtin.command: >
+        ansible-playbook /tmp/reports/{{ inventory_hostname }}-remediation.yml
+      delegate_to: localhost
+      run_once: true
+
+    - name: Cleanup the fetched remediation file on the AWX server
+      ansible.builtin.file:
+        path: /tmp/reports/{{ inventory_hostname }}-remediation.yml
+        state: absent
+      delegate_to: localhost
