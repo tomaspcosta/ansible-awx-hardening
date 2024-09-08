@@ -2,13 +2,20 @@
 - name: Apply SCAP Remediation on target hosts
   hosts: all
   tasks:
-    - name: Ensure the remediation file is copied from the master node
+    - name: Copy the remediation file from the master node to the target host
       ansible.builtin.copy:
         src: /home/master/remediations/{{ inventory_hostname }}-remediation.yml
         dest: /tmp/{{ inventory_hostname }}-remediation.yml
       delegate_to: localhost
-      # Adjust permissions as necessary
-      mode: '0664'
+      # Set appropriate permissions after the file has been copied
+      # This is not done in the copy task but rather after ensuring the file is present
+
+    - name: Ensure the correct permissions for the remediation file
+      ansible.builtin.file:
+        path: /tmp/{{ inventory_hostname }}-remediation.yml
+        state: file
+        mode: '0664'
+      # This ensures the file has the correct permissions
 
     - name: Apply the remediation file on the target host
       ansible.builtin.command:
