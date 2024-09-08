@@ -6,8 +6,8 @@
       ansible.builtin.copy:
         src: /home/master/remediations/{{ inventory_hostname }}-remediation.yml
         dest: /tmp/{{ inventory_hostname }}-remediation.yml
-      delegate_to: master
-      remote_user: master
+      delegate_to: localhost
+      remote_src: no
 
     - name: Apply the remediation file on the target host
       ansible.builtin.command: ansible-playbook /tmp/{{ inventory_hostname }}-remediation.yml
