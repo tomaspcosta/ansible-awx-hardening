@@ -1,0 +1,6 @@
+---
+- name: Apply SCAP Remediation
+  hosts: all
+  tasks:
+    - name: Apply the remediation file from the master node
+      ansible.builtin.command: ansible-playbook /home/master/reports/{{ inventory_hostname }}-remediation.yml
