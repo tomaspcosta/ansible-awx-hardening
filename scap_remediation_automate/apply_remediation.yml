@@ -2,16 +2,20 @@
 - name: Apply SCAP Remediation on target hosts
   hosts: all
   tasks:
-    - name: Copy the remediation file from master to the target host
+    - name: Ensure the remediation file is copied from the master node
       ansible.builtin.copy:
         src: /home/master/remediations/{{ inventory_hostname }}-remediation.yml
         dest: /tmp/{{ inventory_hostname }}-remediation.yml
       delegate_to: localhost
+      # Adjust permissions as necessary
+      mode: '0664'
 
     - name: Apply the remediation file on the target host
       ansible.builtin.command:
         cmd: ansible-playbook /tmp/{{ inventory_hostname }}-remediation.yml
-      ignore_errors: yes
+      # Run the remediation playbook on the target host
+      # Ensure ansible-playbook is in the PATH on the target host
+      # If ansible-playbook is not available on target hosts, consider using a local action instead
 
     - name: Cleanup the remediation file on the target host
       ansible.builtin.file:
