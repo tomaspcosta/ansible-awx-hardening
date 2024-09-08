@@ -25,7 +25,7 @@
 
     - name: Print remediation generation status
       ansible.builtin.debug:
-        var: generate_remediation.rc
+        msg: "Remediation generation status: {{ generate_remediation.rc }}"
 
     - name: Check if the remediation file was generated
       ansible.builtin.stat:
@@ -37,14 +37,23 @@
         msg: "The remediation file /tmp/{{ inventory_hostname }}-remediation.yml was not created."
       when: not remediation_file.stat.exists
 
+    - name: Print remediation file details
+      ansible.builtin.debug:
+        msg: "Remediation file details: {{ remediation_file }}"
+
     - name: Apply the remediation file
       ansible.builtin.command: >
         ansible-playbook /tmp/{{ inventory_hostname }}-remediation.yml
+      register: apply_remediation
       ignore_errors: yes
 
     - name: Print remediation application status
       ansible.builtin.debug:
-        msg: "Remediation applied with status {{ ansible_status.rc }}"
+        msg: "Remediation application status: {{ apply_remediation.rc }}"
+
+    - name: Print remediation application output
+      ansible.builtin.debug:
+        msg: "Remediation application output: {{ apply_remediation.stdout }}"
 
     - name: Cleanup remediation file
       ansible.builtin.file:
