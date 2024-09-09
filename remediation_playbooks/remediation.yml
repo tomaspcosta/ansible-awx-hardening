@@ -21596,8 +21596,7 @@
         - always
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
-      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table
-        }}'
+      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
       register: existing_nftables
       changed_when: false
       failed_when: false
@@ -21611,8 +21610,7 @@
       - set_nftables_base_chain
     
     - name: Ensure Base Chains Exist for Nftables - Set NFTables Table
-      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table
-        }}
+      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table }}
       when:
       - '"nftable
     - name: XCCDF Value var_nftables_base_chain_policies # promote to variable
@@ -21622,8 +21620,7 @@
         - always
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
-      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table
-        }}'
+      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
       register: existing_nftables
       changed_when: false
       failed_when: false
@@ -21637,8 +21634,7 @@
       - set_nftables_base_chain
     
     - name: Ensure Base Chains Exist for Nftables - Set NFTables Table
-      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table
-        }}
+      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table }}
       when:
       - '"nftables" in ansible_facts.packages'
       - existing_nftables.rc > 0
@@ -21649,13 +21645,9 @@
       - no_reboot_needed
       - restrict_strategy
       - set_nftables_base_chain
-    
-    - name: Ensure Base Chains Exist for Nftables - Add Base Chains
-      ansible.builtin.command: nft 'add chain {{ var_nftables_famil
     
     - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
-      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table
-        }}'
+      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
       register: existing_nftables
       changed_when: false
       failed_when: false
@@ -21669,8 +21661,7 @@
       - set_nftables_base_chain
     
     - name: Ensure Base Chains Exist for Nftables - Set NFTables Table
-      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table
-        }}
+      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table }}
       when:
       - '"nftables" in ansible_facts.packages'
       - existing_nftables.rc > 0
@@ -21683,8 +21674,7 @@
       - set_nftables_base_chain
     
     - name: Ensure Base Chains Exist for Nftables - Add Base Chains
-      ansible.builtin.command: nft 'add chain {{ var_nftables_family }} {{ var_nftables_table
-        }} {{ item.0 }} { type {{ item.1 }} hook {{ item.2 }} priority {{ item.3 }} ;
+      ansible.builtin.command: nft 'add chain {{ var_nftables_family }} {{ var_nftables_table }} {{ item.0 }} { type {{ item.1 }} hook {{ item.2 }} priority {{ item.3 }} ;
         policy {{ item.4 }} ; }'
       with_together:
       - '{{ var_nftables_base_chain_names.split(",") }}'
@@ -21811,8 +21801,7 @@
       - set_nftables_table
     
     - name: Set Nftable Table
-      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table
-        }}
+      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table }}
       when:
       - '"nftables" in ansible_facts.packages'
       - existing_nftables.stdout_lines | length == 0
