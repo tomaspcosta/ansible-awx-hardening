@@ -28,7 +28,7 @@
 
     - name: Slurp the remediation file from the node
       ansible.builtin.slurp:
-        src: /tmp/{{ ansible_hostname }}-remediation.yml
+        src: /tmp/{{ inventory_hostname }}-remediation.yml
       register: slurp_remediation
 
     - name: Create remediations directory on the master node
