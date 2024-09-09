@@ -4526,23 +4526,22 @@
       tags:
         - always
     
-    - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
-      ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
-      register: existing_nftables
-      changed_when: false
-      failed_when: false
-      when: '"nftables" in ansible_facts.packages'
-      tags:
-      - low_complexity
-      - low_disruption
-      - medium_severity
-      - no_reboot_needed
-      - restrict_strategy
-      - set_nftables_base_chain
+    # - name: Ensure Base Chains Exist for Nftables - Check Existence of Nftables Table
+    #   ansible.builtin.shell: nft list tables | grep '{{ var_nftables_family }} {{ var_nftables_table }}'
+    #   register: existing_nftables
+    #   changed_when: false
+    #   failed_when: false
+    #   when: '"nftables" in ansible_facts.packages'
+    #   tags:
+    #   - low_complexity
+    #   - low_disruption
+    #   - medium_severity
+    #   - no_reboot_needed
+    #   - restrict_strategy
+    #   - set_nftables_base_chain
     
     - name: Ensure Base Chains Exist for Nftables - Set NFTables Table
-      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table
-        }}
+      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table }}
       when:
       - '"nftable
     - name: XCCDF Value var_nftables_base_chain_policies # promote to variable
@@ -4566,8 +4565,7 @@
       - set_nftables_base_chain
     
     - name: Ensure Base Chains Exist for Nftables - Set NFTables Table
-      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table
-        }}
+      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table }}
       when:
       - '"nftables" in ansible_facts.packages'
       - existing_nftables.rc > 0
@@ -4597,8 +4595,7 @@
       - set_nftables_base_chain
     
     - name: Ensure Base Chains Exist for Nftables - Set NFTables Table
-      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table
-        }}
+      ansible.builtin.command: nft create table {{ var_nftables_family }} {{ var_nftables_table }}
       when:
       - '"nftables" in ansible_facts.packages'
       - existing_nftables.rc > 0
